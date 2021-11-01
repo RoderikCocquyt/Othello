@@ -178,7 +178,7 @@ namespace Othello.View
                 }
 
                 Ellipse circle = GetEllipse(grdField);
-                var color = (Color)ColorConverter.ConvertFromString(centerField.Side.ToString());
+                Color color = (Color)ColorConverter.ConvertFromString(centerField.Side.ToString());
                 circle.Fill = new SolidColorBrush(color);
             }
         }
@@ -253,8 +253,14 @@ namespace Othello.View
                     var targetDisk = child as Ellipse;
                     if (controller.ValidateDropTarget(targetDisk))
                     {
+                        // Draw disk
                         Brush color = (Brush)e.Data.GetData("Brush");
                         targetDisk.Fill = color;
+
+                        // Update virtual grid
+                        var targetField = targetDisk.Tag as Field;
+                        Side side = GetSideFromColor((SolidColorBrush)color);
+                        VirtualGrid[targetField.GridRow, targetField.GridColumn] = side;
                     }
                 }
 
@@ -265,6 +271,22 @@ namespace Othello.View
                     rect.StrokeThickness = 1;
                 }
             }
+        }
+
+        private Side GetSideFromColor(SolidColorBrush color)
+        {
+            string colorName = GetColorName(color);
+            Side side = (Side)Enum.Parse(typeof(Side), colorName);
+            return side;
+        }
+
+        private string GetColorName(SolidColorBrush brush)
+        {
+            var results = typeof(Colors).GetProperties()
+                .Where(p => (Color)p.GetValue(null, null) == brush.Color)
+                .Select(p => p.Name);
+
+            return results.Count() > 0 ? results.First() : string.Empty;
         }
     }
 }
