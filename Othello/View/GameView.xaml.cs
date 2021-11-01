@@ -1,5 +1,7 @@
 ﻿using Othello.Model.Enums;
 using Othello.Model.Objects;
+using Othello.ViewModel;
+using Othello.ViewModel.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,11 +22,13 @@ namespace Othello.View
     /// </summary>
     public partial class GameView : Window
     {
+        private readonly int numberOfPlayers;
         private const int NumberOfRows = 8;
         private const int NumberOfColumns = 8;
         private readonly int[,] fields;
 
-        private int numberOfPlayers;
+        private readonly GameParam param;
+        private readonly GameController controller;
 
         public GameView()
         {
@@ -36,6 +40,8 @@ namespace Othello.View
         {
             this.numberOfPlayers = numberOfPlayers;
             this.fields = new int[NumberOfRows, NumberOfColumns];
+            this.param = new GameParam(numberOfPlayers, NumberOfRows, NumberOfColumns);
+            this.controller = new GameController(this.param);
 
             BuildGrid();
             InitializeGrid();
