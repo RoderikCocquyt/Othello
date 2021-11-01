@@ -67,9 +67,8 @@ namespace Othello.ViewModel
                 return false;
             }
 
-            CheckSurroundingFields(field, surroundingFields, side);
-
-            return true;
+            bool validMove = CheckSurroundingFields(field, surroundingFields, side);
+            return validMove;
         }
 
         private List<Field> GetSurroundingFields(Field field)
@@ -115,232 +114,93 @@ namespace Othello.ViewModel
                 // Right
                 if (surroundingField.GridRow == field.GridRow && surroundingField.GridColumn > field.GridColumn)
                 {
-                    var rightFields = new List<Field>() { surroundingField };
-                    int col = surroundingField.GridColumn;
-                    Field nextField = new Field(surroundingField.GridRow, surroundingField.GridColumn);
-
-                    while(nextField.Side != surroundingField.Side && nextField.GridColumn < param.NumberOfColumns)
-                    {
-                        nextField = new Field(nextField.GridRow, nextField.GridColumn + 1)
-                        {
-                            Side = virtualGrid[field.GridRow, nextField.GridColumn + 1]
-                        };
-
-                        if (nextField.Side != Side.Empty)
-                        {
-                            rightFields.Add(nextField);
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-                    fieldsToFlip.AddRange(rightFields);
+                    fieldsToFlip = GetNextFields(field, surroundingField, fieldsToFlip, side, 0, 1);
                 }
 
                 // Left
                 if (surroundingField.GridRow == field.GridRow && surroundingField.GridColumn < field.GridColumn)
                 {
-                    var leftFields = new List<Field>() { surroundingField };
-                    int col = surroundingField.GridColumn;
-                    Field nextField = new Field(surroundingField.GridRow, surroundingField.GridColumn);
-
-                    while (nextField.Side != surroundingField.Side && nextField.GridColumn >= 0)
-                    {
-                        nextField = new Field(nextField.GridRow, nextField.GridColumn - 1)
-                        {
-                            Side = virtualGrid[field.GridRow, nextField.GridColumn - 1]
-                        };
-
-                        if (nextField.Side != Side.Empty)
-                        {
-                            leftFields.Add(nextField);
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-                    fieldsToFlip.AddRange(leftFields);
+                    fieldsToFlip = GetNextFields(field, surroundingField, fieldsToFlip, side, 0, -1);
                 }
 
                 // Top
                 if (surroundingField.GridRow > field.GridRow && surroundingField.GridColumn == field.GridColumn)
                 {
-                    var topFields = new List<Field>() { surroundingField };
-                    int row = surroundingField.GridRow;
-                    Field nextField = new Field(surroundingField.GridRow, surroundingField.GridColumn);
-
-                    while (nextField.Side != surroundingField.Side && nextField.GridRow >= 0)
-                    {
-                        nextField = new Field(nextField.GridRow - 1, nextField.GridColumn)
-                        {
-                            Side = virtualGrid[field.GridRow - 1, nextField.GridColumn]
-                        };
-
-                        if (nextField.Side != Side.Empty)
-                        {
-                            topFields.Add(nextField);
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-                    fieldsToFlip.AddRange(topFields);
+                    fieldsToFlip = GetNextFields(field, surroundingField, fieldsToFlip, side, -1, 0);
                 }
 
                 // Bottom
                 if (surroundingField.GridRow < field.GridRow && surroundingField.GridColumn == field.GridColumn)
                 {
-                    var bottomFields = new List<Field>() { surroundingField };
-                    int row = surroundingField.GridRow;
-                    Field nextField = new Field(surroundingField.GridRow, surroundingField.GridColumn);
-
-                    while (nextField.Side != surroundingField.Side && nextField.GridRow < param.NumberOfRows)
-                    {
-                        nextField = new Field(nextField.GridRow + 1, nextField.GridColumn)
-                        {
-                            Side = virtualGrid[field.GridRow + 1, nextField.GridColumn]
-                        };
-
-                        if (nextField.Side != Side.Empty)
-                        {
-                            bottomFields.Add(nextField);
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-                    fieldsToFlip.AddRange(bottomFields);
+                    fieldsToFlip = GetNextFields(field, surroundingField, fieldsToFlip, side, 1, 0);
                 }
 
                 // Bottom right
                 if (surroundingField.GridRow > field.GridRow && surroundingField.GridColumn > field.GridColumn)
                 {
-                    var bottomRightFields = new List<Field>() { surroundingField };
-                    int row = surroundingField.GridRow;
-                    int col = surroundingField.GridColumn;
-                    Field nextField = new Field(row, col);
-
-                    while (nextField.Side != surroundingField.Side &&
-                            nextField.GridRow < param.NumberOfRows && nextField.GridColumn < param.NumberOfColumns)
-                    {
-                        nextField = new Field(nextField.GridRow + 1, nextField.GridColumn + 1)
-                        {
-                            Side = virtualGrid[field.GridRow + 1, nextField.GridColumn + 1]
-                        };
-
-                        if (nextField.Side != Side.Empty)
-                        {
-                            bottomRightFields.Add(nextField);
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-                    fieldsToFlip.AddRange(bottomRightFields);
+                    fieldsToFlip = GetNextFields(field, surroundingField, fieldsToFlip, side, 1, 1);
                 }
 
                 // Bottom left
                 if (surroundingField.GridRow > field.GridRow && surroundingField.GridColumn < field.GridColumn)
                 {
-                    var bottomLeftFields = new List<Field>() { surroundingField };
-                    int row = surroundingField.GridRow;
-                    int col = surroundingField.GridColumn;
-                    Field nextField = new Field(row, col);
-
-                    while (nextField.Side != surroundingField.Side &&
-                            nextField.GridRow < param.NumberOfRows && nextField.GridColumn >= 0)
-                    {
-                        nextField = new Field(nextField.GridRow + 1, nextField.GridColumn - 1)
-                        {
-                            Side = virtualGrid[field.GridRow + 1, nextField.GridColumn - 1]
-                        };
-
-                        if (nextField.Side != Side.Empty)
-                        {
-                            bottomLeftFields.Add(nextField);
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-                    fieldsToFlip.AddRange(bottomLeftFields);
+                    fieldsToFlip = GetNextFields(field, surroundingField, fieldsToFlip, side, 1, -1);
                 }
 
                 // Top left
                 if (surroundingField.GridRow < field.GridRow && surroundingField.GridColumn < field.GridColumn)
                 {
-                    var topLeftFields = new List<Field>() { surroundingField };
-                    int row = surroundingField.GridRow;
-                    int col = surroundingField.GridColumn;
-                    Field nextField = new Field(row, col);
-
-                    while (nextField.Side != surroundingField.Side &&
-                            nextField.GridRow >= 0 && nextField.GridColumn >= 0)
-                    {
-                        nextField = new Field(nextField.GridRow - 1, nextField.GridColumn - 1)
-                        {
-                            Side = virtualGrid[field.GridRow - 1, nextField.GridColumn - 1]
-                        };
-
-                        if (nextField.Side != Side.Empty)
-                        {
-                            topLeftFields.Add(nextField);
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-                    fieldsToFlip.AddRange(topLeftFields);
+                    fieldsToFlip = GetNextFields(field, surroundingField, fieldsToFlip, side, -1, -1);
                 }
 
                 // Top right
                 if (surroundingField.GridRow < field.GridRow && surroundingField.GridColumn > field.GridColumn)
                 {
-                    var topRightFields = new List<Field>() { surroundingField };
-                    int row = surroundingField.GridRow;
-                    int col = surroundingField.GridColumn;
-                    Field nextField = new Field(row, col);
-
-                    while (nextField.Side != surroundingField.Side &&
-                            nextField.GridRow >= 0 && nextField.GridColumn < param.NumberOfColumns)
-                    {
-                        nextField = new Field(nextField.GridRow - 1, nextField.GridColumn + 1)
-                        {
-                            Side = virtualGrid[field.GridRow - 1, nextField.GridColumn + 1]
-                        };
-
-                        if (nextField.Side != Side.Empty)
-                        {
-                            topRightFields.Add(nextField);
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-                    fieldsToFlip.AddRange(topRightFields);
+                    fieldsToFlip = GetNextFields(field, surroundingField, fieldsToFlip, side, -1, 1);
                 }
             }
 
             gameView.FlipDisks(fieldsToFlip, side);
             totalFlips += fieldsToFlip.Count;
+            gameView.SwitchSide();
 
             return true;
+        }
+
+        private List<Field> GetNextFields(Field field, 
+                Field surroundingField,
+                List<Field> fieldsToFlip,
+                Side side, 
+                int rowDiff, 
+                int colDiff)
+        {
+            var nextFields = new List<Field>() { surroundingField };
+            Field nextField = new Field(surroundingField.GridRow, surroundingField.GridColumn);
+
+            while (nextField.GridRow >= 0 && nextField.GridRow < param.NumberOfRows
+                && nextField.GridColumn >= 0 && nextField.GridColumn < param.NumberOfColumns)
+            {
+                nextField = new Field(nextField.GridRow + rowDiff, nextField.GridColumn + colDiff)
+                {
+                    Side = virtualGrid[nextField.GridRow + rowDiff, nextField.GridColumn + colDiff]
+                };
+
+                if (nextField.Side == side)
+                {
+                    fieldsToFlip.AddRange(nextFields);
+                    break;
+                }
+                else if (nextField.Side != Side.Empty)
+                {
+                    nextFields.Add(nextField);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return fieldsToFlip;
         }
 
         private Field GetField(int gridRow, int gridCol)

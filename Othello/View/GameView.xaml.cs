@@ -97,6 +97,14 @@ namespace Othello.View
             }
         }
 
+        internal void SwitchSide()
+        {
+            var newDisk = GetEllipse(grdNewDisk);
+            var currentSide = ColorHelper.GetSideFromColor((SolidColorBrush)newDisk.Fill);
+            Side newSide = currentSide == Side.Black ? Side.White : Side.Black;
+            newDisk.Fill = ColorHelper.GetColorFromSide(newSide);
+        }
+
         private void BuildGrid()
         {
             for (int col = 0; col < NumberOfColumns; col++)
