@@ -1,5 +1,6 @@
 ﻿using Othello.Model.Enums;
 using Othello.Model.Objects;
+using Othello.View;
 using Othello.ViewModel.Dto;
 using System;
 using System.Collections.Generic;
@@ -12,20 +13,18 @@ namespace Othello.ViewModel
 {
     public class GameController
     {
+        private readonly GameView gameView;
         private readonly GameParam param;
 
         private Side[,] virtualGrid;
 
-        public GameController()
+        public GameController(GameView gameView, GameParam param)
         {
-        }
-
-        public GameController(GameParam param)
-        {
+            this.gameView = gameView;
             this.param = param;
         }
 
-        public bool ValidateDropTarget(Ellipse dropTarget)
+        public bool ValidateDropTarget(Ellipse dropTarget, Side side)
         {
             bool diskHasColor = !ValidateDisk(dropTarget);
             if (diskHasColor)
@@ -34,7 +33,7 @@ namespace Othello.ViewModel
             }
 
             var field = dropTarget.Tag as Field;
-            bool isAllowedMove = ValidateField(field);
+            bool isAllowedMove = ValidateField(field, side);
 
             return isAllowedMove;
         }
@@ -58,13 +57,17 @@ namespace Othello.ViewModel
             return valid;
         }
 
-        private bool ValidateField(Field field)
+        private bool ValidateField(Field field, Side side)
         {
             var surroundingFields = GetSurroundingFields(field);
-            if (!surroundingFields.Where(f => f.Side != Side.Empty).Any())
+
+            bool allSurroundingFieldsAreEmpty = !surroundingFields.Where(f => f.Side != Side.Empty).Any();
+            if (allSurroundingFieldsAreEmpty)
             {
                 return false;
             }
+
+            CheckSurroundingFields(field, surroundingFields, side);
 
             return true;
         }
@@ -94,6 +97,49 @@ namespace Othello.ViewModel
             }
 
             return surroundingFields;
+        }
+
+        private bool CheckSurroundingFields(Field field, List<Field> surroundingFields, Side side)
+        {
+            //We only need the surrounding disks of the opposite side
+            var oppositeFields = surroundingFields.Where(f => f.Side != Side.Empty && f.Side != side).ToList();
+            if (!oppositeFields.Any())
+            {
+                return false;
+            }
+
+            int totalFlips = 0;
+            foreach (var surroundingField in oppositeFields)
+            {
+                if (surroundingField.GridRow == field.GridRow && surroundingField.GridColumn > field.GridColumn)
+                {
+                    var rightFields = new List<Field>() { surroundingField };
+                    int col = surroundingField.GridColumn;
+                    Field nextField = new Field(surroundingField.GridRow, surroundingField.GridColumn);
+
+                    while(nextField.Side != surroundingField.Side && col < param.NumberOfColumns)
+                    {
+                        nextField = new Field(nextField.GridRow, nextField.GridColumn + 1)
+                        {
+                            Side = virtualGrid[field.GridRow, nextField.GridColumn + 1]
+                        };
+
+                        if (nextField.Side != Side.Empty)
+                        {
+                            rightFields.Add(nextField);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    gameView.FlipDisks(rightFields, side);
+                    totalFlips += rightFields.Count;
+                }
+            }
+
+            return true;
         }
 
         private Field GetField(int gridRow, int gridCol)

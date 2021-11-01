@@ -43,7 +43,7 @@ namespace Othello.View
             this.numberOfPlayers = numberOfPlayers;
             this.virtualGrid = new Side[NumberOfRows, NumberOfColumns];
             this.param = new GameParam(numberOfPlayers, NumberOfRows, NumberOfColumns);
-            this.controller = new GameController(this.param);
+            this.controller = new GameController(this, this.param);
 
             BuildGrid();
             InitializeGrid();
@@ -65,6 +65,37 @@ namespace Othello.View
         }
 
         internal Ellipse SourceDisk { get; set; }
+
+        internal void FlipDisks(List<Field> fields, Side side)
+        {
+            // Update virtual grid
+            foreach (var field in fields)
+            {
+                VirtualGrid[field.GridRow, field.GridColumn] = side;
+            }
+
+            // Set disk color in the grid
+            foreach (var child in grdGame.Children)
+            {
+                if (!(child is Grid))
+                {
+                    continue;
+                }
+
+                var grdField = child as Grid;
+                var fieldToChange = fields.Where(f => f.GridColumn == Grid.GetColumn(grdField)
+                        && f.GridRow == Grid.GetRow(grdField))
+                        .FirstOrDefault();
+                if (fieldToChange == null)
+                {
+                    continue;
+                }
+
+                Ellipse circle = GetEllipse(grdField);
+                SolidColorBrush color = ColorHelper.GetColorFromSide(side);
+                circle.Fill = color;
+            }
+        }
 
         private void BuildGrid()
         {
@@ -251,16 +282,17 @@ namespace Othello.View
                         return;
                     }
 
+                    Brush color = (Brush)e.Data.GetData("Brush");
                     var targetDisk = child as Ellipse;
-                    if (controller.ValidateDropTarget(targetDisk))
+                    Side side = ColorHelper.GetSideFromColor((SolidColorBrush)color);
+
+                    if (controller.ValidateDropTarget(targetDisk, side))
                     {
                         // Draw disk
-                        Brush color = (Brush)e.Data.GetData("Brush");
                         targetDisk.Fill = color;
 
                         // Update virtual grid
                         var targetField = targetDisk.Tag as Field;
-                        Side side = ColorHelper.GetSideFromColor((SolidColorBrush)color);
                         VirtualGrid[targetField.GridRow, targetField.GridColumn] = side;
                     }
                 }
