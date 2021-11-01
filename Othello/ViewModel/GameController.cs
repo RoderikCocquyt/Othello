@@ -11,7 +11,9 @@ namespace Othello.ViewModel
     public class GameController
     {
         private readonly GameParam param;
-        
+
+        private Side[,] virtualGrid;
+
         public GameController()
         {
         }
@@ -34,6 +36,11 @@ namespace Othello.ViewModel
 
             bool valid = targetColor != white && targetColor != black;
             return valid;
+        }
+
+        internal void SetVirtualGrid(Side[,] virtualGrid)
+        {
+            this.virtualGrid = virtualGrid;
         }
     }
 }
