@@ -226,8 +226,11 @@ namespace Othello.View
                     }
 
                     var targetDisk = child as Ellipse;
-                    Brush color = (Brush)e.Data.GetData("Brush");
-                    targetDisk.Fill = color;
+                    if (controller.ValidateDropTarget(targetDisk))
+                    {
+                        Brush color = (Brush)e.Data.GetData("Brush");
+                        targetDisk.Fill = color;
+                    }
                 }
 
                 if (child is Rectangle)
