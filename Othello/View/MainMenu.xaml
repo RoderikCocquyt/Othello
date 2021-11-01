@@ -1,0 +1,20 @@
+﻿<Window x:Class="Othello.View.MainMenu"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Othello.View"
+        mc:Ignorable="d"
+        Title="MainMenu" Height="450" Width="800">
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <RadioButton Name="btnPlayers1" GroupName="players" Content="One player" Checked="btnPlayers1_Checked" Margin="10"></RadioButton>
+            <RadioButton Name="btnPlayers2" GroupName="players" Content="Two players" Checked="btnPlayers2_Checked" IsChecked="true" Margin="10"></RadioButton>
+        </StackPanel>
+        <StackPanel Orientation="Vertical">
+            <Button Name="btnNew" Content="New game" Click="btnNew_Click" Margin="10"></Button>
+            <Button Name="btnLoad" Content="Load game" Margin="10"></Button>
+            <Button Name="btnOptions" Content="Options" Margin="10"></Button>
+        </StackPanel>
+    </StackPanel>
+</Window>

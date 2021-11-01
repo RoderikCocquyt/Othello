@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "uCtNMsiY1TMgJ1IiIBSIXOHUO+Y0IutcQqd0OCCqlzfE+PvlVpFRZIlphPvpL7cKBFfM1cFxspEMTzQZFSgnYQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Admin\\source\\repos\\Othello\\Othello\\Othello.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Admin\\.nuget\\packages\\mvvmlight\\5.4.1.1\\mvvmlight.5.4.1.1.nupkg.sha512"
+  ],
+  "logs": []
+}
