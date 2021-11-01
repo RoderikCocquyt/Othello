@@ -1,5 +1,6 @@
 ﻿using Othello.Model.Enums;
 using Othello.Model.Objects;
+using Othello.View.Utils;
 using Othello.ViewModel;
 using Othello.ViewModel.Dto;
 using System;
@@ -178,8 +179,8 @@ namespace Othello.View
                 }
 
                 Ellipse circle = GetEllipse(grdField);
-                Color color = (Color)ColorConverter.ConvertFromString(centerField.Side.ToString());
-                circle.Fill = new SolidColorBrush(color);
+                SolidColorBrush color = ColorHelper.GetColorFromSide(centerField.Side);
+                circle.Fill = color;
             }
         }
 
@@ -259,7 +260,7 @@ namespace Othello.View
 
                         // Update virtual grid
                         var targetField = targetDisk.Tag as Field;
-                        Side side = GetSideFromColor((SolidColorBrush)color);
+                        Side side = ColorHelper.GetSideFromColor((SolidColorBrush)color);
                         VirtualGrid[targetField.GridRow, targetField.GridColumn] = side;
                     }
                 }
@@ -271,22 +272,6 @@ namespace Othello.View
                     rect.StrokeThickness = 1;
                 }
             }
-        }
-
-        private Side GetSideFromColor(SolidColorBrush color)
-        {
-            string colorName = GetColorName(color);
-            Side side = (Side)Enum.Parse(typeof(Side), colorName);
-            return side;
-        }
-
-        private string GetColorName(SolidColorBrush brush)
-        {
-            var results = typeof(Colors).GetProperties()
-                .Where(p => (Color)p.GetValue(null, null) == brush.Color)
-                .Select(p => p.Name);
-
-            return results.Count() > 0 ? results.First() : string.Empty;
         }
     }
 }

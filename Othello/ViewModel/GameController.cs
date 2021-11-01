@@ -86,7 +86,10 @@ namespace Othello.ViewModel
                     }
                     
                     var surroundingField = GetField(i, j);
-                    surroundingFields.Add(surroundingField);
+                    if (surroundingField != null)
+                    {
+                        surroundingFields.Add(surroundingField);
+                    }
                 }
             }
 
