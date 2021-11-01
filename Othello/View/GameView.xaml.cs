@@ -25,7 +25,7 @@ namespace Othello.View
         private readonly int numberOfPlayers;
         private const int NumberOfRows = 8;
         private const int NumberOfColumns = 8;
-        private readonly int[,] fields;
+        private readonly Side[,] virtualGrid;
 
         private readonly GameParam param;
         private readonly GameController controller;
@@ -39,7 +39,7 @@ namespace Othello.View
             : this()
         {
             this.numberOfPlayers = numberOfPlayers;
-            this.fields = new int[NumberOfRows, NumberOfColumns];
+            this.virtualGrid = new Side[NumberOfRows, NumberOfColumns];
             this.param = new GameParam(numberOfPlayers, NumberOfRows, NumberOfColumns);
             this.controller = new GameController(this.param);
 
@@ -47,7 +47,7 @@ namespace Othello.View
             InitializeGrid();
         }
 
-        public Ellipse SourceDisk { get; set; }
+        internal Ellipse SourceDisk { get; set; }
 
         private void BuildGrid()
         {
@@ -136,6 +136,13 @@ namespace Othello.View
 
         private void SetCenter(List<Field> centerFields)
         {
+            // Set the center in the virtual grid
+            foreach (var field in centerFields)
+            {
+                virtualGrid[field.GridRow, field.GridColumn] = field.Side;
+            }
+
+            // Set disk color in the grid
             foreach (var child in grdGame.Children)
             {
                 if (!(child is Grid))
