@@ -20,8 +20,8 @@ namespace Othello.View
     /// </summary>
     public partial class GameView : Window
     {
-        private const int NumberOfColumns= 8;
         private const int NumberOfRows = 8;
+        private const int NumberOfColumns = 8;
         private readonly int[,] fields;
 
         private int numberOfPlayers;
