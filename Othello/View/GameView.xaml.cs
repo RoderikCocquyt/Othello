@@ -132,6 +132,8 @@ namespace Othello.View
         {
             var centerFields = GetCenter();
             SetCenter(centerFields);
+
+            controller.SetVirtualGrid(VirtualGrid);
         }
 
         private List<Field> GetCenter()

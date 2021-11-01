@@ -27,7 +27,7 @@ namespace Othello.ViewModel
 
         public bool ValidateDropTarget(Ellipse dropTarget)
         {
-            bool diskHasColor = ValidateDisk(dropTarget);
+            bool diskHasColor = !ValidateDisk(dropTarget);
             if (diskHasColor)
             {
                 return false;
@@ -42,7 +42,6 @@ namespace Othello.ViewModel
         /// <summary>
         /// Checks whether the target disk already has a color.
         /// </summary>
-        /// <param name="dropTarget"></param>
         /// <returns>True when the target disk has no color.</returns>
         private bool ValidateDisk(Ellipse dropTarget)
         {
@@ -80,6 +79,12 @@ namespace Othello.ViewModel
             {
                 for (int j = col - 1; j <= col + 1; j++)
                 {
+                    bool isThisField = i == row && j == col;
+                    if (isThisField)
+                    {
+                        continue;
+                    }
+                    
                     var surroundingField = GetField(i, j);
                     surroundingFields.Add(surroundingField);
                 }
