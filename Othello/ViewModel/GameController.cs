@@ -124,13 +124,13 @@ namespace Othello.ViewModel
                 }
 
                 // Top
-                if (surroundingField.GridRow > field.GridRow && surroundingField.GridColumn == field.GridColumn)
+                if (surroundingField.GridRow < field.GridRow && surroundingField.GridColumn == field.GridColumn)
                 {
                     fieldsToFlip = GetNextFields(field, surroundingField, fieldsToFlip, side, -1, 0);
                 }
 
                 // Bottom
-                if (surroundingField.GridRow < field.GridRow && surroundingField.GridColumn == field.GridColumn)
+                if (surroundingField.GridRow > field.GridRow && surroundingField.GridColumn == field.GridColumn)
                 {
                     fieldsToFlip = GetNextFields(field, surroundingField, fieldsToFlip, side, 1, 0);
                 }
