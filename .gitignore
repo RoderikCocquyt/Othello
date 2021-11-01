@@ -386,3 +386,6 @@ FodyWeavers.xsd
 # JetBrains Rider
 .idea/
 *.sln.iml
+Othello/obj/Debug/netcoreapp3.1/Othello.pdb
+Othello/obj/Debug/netcoreapp3.1/Othello.dll
+Othello/obj/Debug/netcoreapp3.1/Othello.csproj.AssemblyReference.cache
