@@ -25,11 +25,22 @@ namespace Othello.ViewModel
 
         public bool ValidateDropTarget(Ellipse dropTarget)
         {
+            bool diskHasColor = ValidateDisk(dropTarget);
+            if (diskHasColor)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool ValidateDisk(Ellipse dropTarget)
+        {
             if (dropTarget.Fill == null)
             {
                 return true;
             }
-            
+
             var white = (Color)ColorConverter.ConvertFromString(Side.White.ToString());
             var black = (Color)ColorConverter.ConvertFromString(Side.Black.ToString());
             var targetColor = ((SolidColorBrush)dropTarget.Fill).Color;

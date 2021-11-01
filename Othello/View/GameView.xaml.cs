@@ -62,6 +62,7 @@ namespace Othello.View
                 controller.SetVirtualGrid(virtualGrid);
             }
         }
+
         internal Ellipse SourceDisk { get; set; }
 
         private void BuildGrid()
