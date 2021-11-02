@@ -334,7 +334,7 @@ namespace Othello.View
             else
             {
                 // Notify user
-
+                lblSkipTurn.Content = "You can't skip your turn as there's at least one move possible.";
             }
         }
     }
