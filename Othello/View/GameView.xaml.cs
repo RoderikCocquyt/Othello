@@ -320,6 +320,8 @@ namespace Othello.View
         {
             FlipDisks(controller.FieldsToFlip, currentSide);
             SwitchSide();
+
+            ResetLblSkipTurn();
         }
 
         private void btnSkipTurn_Click(object sender, RoutedEventArgs e)
@@ -334,7 +336,15 @@ namespace Othello.View
             else
             {
                 // Notify user
-                lblSkipTurn.Content = "You can't skip your turn as there's at least one move possible.";
+                lblSkipTurn.Content = "You can't skip your turn\nas there's at least one move possible.";
+            }
+        }
+
+        private void ResetLblSkipTurn()
+        {
+            if (lblSkipTurn.Content != null && !string.IsNullOrEmpty(lblSkipTurn.Content.ToString()))
+            {
+                lblSkipTurn.Content = string.Empty;
             }
         }
     }
