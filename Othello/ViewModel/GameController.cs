@@ -160,6 +160,15 @@ namespace Othello.ViewModel
                 }
             }
 
+            // Game rule: 
+            // If on your turn you cannot outflank and flip at least one opposing disk,
+            // your turn is forfeited and your opponent moves again. => Press button "Skip turn"
+            // However, if a move is available to you, you may not forfeit your turn.
+            if (!fieldsToFlip.Any())
+            {
+                return false;
+            }
+
             gameView.FlipDisks(fieldsToFlip, side);
             totalFlips += fieldsToFlip.Count;
             gameView.SwitchSide();
