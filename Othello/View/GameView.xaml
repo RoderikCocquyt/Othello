@@ -9,15 +9,15 @@
     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
         <Grid Name="grdGame" Height="400" Width="400" ShowGridLines="false">
         </Grid>
-        <StackPanel VerticalAlignment="Center">
-            <StackPanel Orientation="Horizontal">
+        <DockPanel VerticalAlignment="Center">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                 <Grid Name="grdNewDisk" Margin="50">
                     <Rectangle Fill="Green" Stroke="Black" StrokeThickness="4" Width="50" Height="50"></Rectangle>
                     <Ellipse Name="ellCurrentPlayer" Fill="Black" Width="40" Height="40" MouseMove="Ellipse_MouseMove"></Ellipse>
                 </Grid>
                 <Button Name="btnSkipTurn" Content="Skip turn" Click="btnSkipTurn_Click" Height="20" Margin="10"></Button>
             </StackPanel>
-            <Label Name="lblSkipTurn" Margin="10"></Label>
-        </StackPanel>
+            <Label Name="lblSkipTurn" DockPanel.Dock="Bottom" Margin="10"></Label>
+        </DockPanel>
     </StackPanel>
 </Window>
