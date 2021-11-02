@@ -24,7 +24,9 @@ namespace Othello.ViewModel
             this.param = param;
         }
 
-        public bool ValidateDropTarget(Ellipse dropTarget, Side side)
+        internal List<Field> FieldsToFlip { get; set; }
+
+        internal bool ValidateDropTarget(Ellipse dropTarget, Side side)
         {
             bool diskHasColor = !ValidateDisk(dropTarget);
             if (diskHasColor)
@@ -38,9 +40,35 @@ namespace Othello.ViewModel
             return isAllowedMove;
         }
 
+        /// <summary>
+        /// A turn can't be skipped when a valid move can be made.
+        /// </summary>
+        /// <param name="currentSide">The color of the player who wants to skip his or her turn.</param>
+        /// <returns>True when the turn can be skipped.</returns>
         internal bool ValidateSkipTurn(Side currentSide)
         {
-            throw new NotImplementedException();
+            for (int row = 0; row < virtualGrid.GetLength(0); row++)
+            {
+                for (int col = 0; col < virtualGrid.GetLength(1); col++)
+                {
+                    // Only check empty fields as all the other fields are occupied already.
+                    if (virtualGrid[row, col] != Side.Empty)
+                    {
+                        continue;
+                    }
+
+                    var field = new Field(row, col) { Side = currentSide };
+                    bool aMoveIsPossible = ValidateField(field, currentSide);
+
+                    if (aMoveIsPossible)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            // No moves are possible -> it's valid to skip the turn.
+            return true;
         }
 
         /// <summary>
@@ -62,7 +90,7 @@ namespace Othello.ViewModel
             return valid;
         }
 
-        private bool ValidateField(Field field, Side side)
+        private bool ValidateField(Field field, Side currentSide)
         {
             var surroundingFields = GetSurroundingFields(field);
 
@@ -72,7 +100,7 @@ namespace Othello.ViewModel
                 return false;
             }
 
-            bool validMove = CheckSurroundingFields(field, surroundingFields, side);
+            bool validMove = CheckSurroundingFields(field, surroundingFields, currentSide);
             return validMove;
         }
 
@@ -103,65 +131,66 @@ namespace Othello.ViewModel
             return surroundingFields;
         }
 
-        private bool CheckSurroundingFields(Field field, List<Field> surroundingFields, Side side)
+        private bool CheckSurroundingFields(Field field, List<Field> surroundingFields, Side currentSide)
         {
-            //We only need the surrounding disks of the opposite side
-            var oppositeFields = surroundingFields.Where(f => f.Side != Side.Empty && f.Side != side).ToList();
+            // We only need the surrounding disks of the opposite side
+            var oppositeFields = surroundingFields.Where(f => f.Side != Side.Empty && f.Side != currentSide).ToList();
             if (!oppositeFields.Any())
             {
                 return false;
             }
 
-            int totalFlips = 0;
-            var fieldsToFlip = new List<Field>();
+            // Reset the collection
+            FieldsToFlip = new List<Field>();
+
             foreach (var surroundingField in oppositeFields)
             {
                 // Right
                 if (surroundingField.GridRow == field.GridRow && surroundingField.GridColumn > field.GridColumn)
                 {
-                    fieldsToFlip = GetNextFields(surroundingField, fieldsToFlip, side, 0, 1);
+                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, 0, 1);
                 }
 
                 // Left
                 if (surroundingField.GridRow == field.GridRow && surroundingField.GridColumn < field.GridColumn)
                 {
-                    fieldsToFlip = GetNextFields(surroundingField, fieldsToFlip, side, 0, -1);
+                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, 0, -1);
                 }
 
                 // Top
                 if (surroundingField.GridRow < field.GridRow && surroundingField.GridColumn == field.GridColumn)
                 {
-                    fieldsToFlip = GetNextFields(surroundingField, fieldsToFlip, side, -1, 0);
+                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, -1, 0);
                 }
 
                 // Bottom
                 if (surroundingField.GridRow > field.GridRow && surroundingField.GridColumn == field.GridColumn)
                 {
-                    fieldsToFlip = GetNextFields(surroundingField, fieldsToFlip, side, 1, 0);
+                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, 1, 0);
                 }
 
                 // Bottom right
                 if (surroundingField.GridRow > field.GridRow && surroundingField.GridColumn > field.GridColumn)
                 {
-                    fieldsToFlip = GetNextFields(surroundingField, fieldsToFlip, side, 1, 1);
+                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, 1, 1);
                 }
 
                 // Bottom left
                 if (surroundingField.GridRow > field.GridRow && surroundingField.GridColumn < field.GridColumn)
                 {
-                    fieldsToFlip = GetNextFields(surroundingField, fieldsToFlip, side, 1, -1);
+                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, 1, -1);
                 }
 
                 // Top left
                 if (surroundingField.GridRow < field.GridRow && surroundingField.GridColumn < field.GridColumn)
                 {
-                    fieldsToFlip = GetNextFields(surroundingField, fieldsToFlip, side, -1, -1);
+                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, -1, -1);
                 }
 
                 // Top right
                 if (surroundingField.GridRow < field.GridRow && surroundingField.GridColumn > field.GridColumn)
                 {
-                    fieldsToFlip = GetNextFields(surroundingField, fieldsToFlip, side, -1, 1);
+                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, -1, 1);
                 }
             }
 
@@ -169,14 +198,10 @@ namespace Othello.ViewModel
             // If on your turn you cannot outflank and flip at least one opposing disk,
             // your turn is forfeited and your opponent moves again. => Press button "Skip turn"
             // However, if a move is available to you, you may not forfeit your turn.
-            if (!fieldsToFlip.Any())
+            if (!FieldsToFlip.Any())
             {
                 return false;
             }
-
-            gameView.FlipDisks(fieldsToFlip, side);
-            totalFlips += fieldsToFlip.Count;
-            gameView.SwitchSide();
 
             return true;
         }

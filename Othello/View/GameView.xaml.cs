@@ -292,16 +292,18 @@ namespace Othello.View
 
                     Brush color = (Brush)e.Data.GetData("Brush");
                     var targetDisk = child as Ellipse;
-                    Side side = ColorHelper.GetSideFromColor((SolidColorBrush)color);
+                    Side currentSide = ColorHelper.GetSideFromColor((SolidColorBrush)color);
 
-                    if (controller.ValidateDropTarget(targetDisk, side))
+                    if (controller.ValidateDropTarget(targetDisk, currentSide))
                     {
                         // Draw disk
                         targetDisk.Fill = color;
 
                         // Update virtual grid
                         var targetField = targetDisk.Tag as Field;
-                        VirtualGrid[targetField.GridRow, targetField.GridColumn] = side;
+                        VirtualGrid[targetField.GridRow, targetField.GridColumn] = currentSide;
+
+                        ExecuteMove(currentSide);
                     }
                 }
 
@@ -314,10 +316,26 @@ namespace Othello.View
             }
         }
 
+        private void ExecuteMove(Side currentSide)
+        {
+            FlipDisks(controller.FieldsToFlip, currentSide);
+            SwitchSide();
+        }
+
         private void btnSkipTurn_Click(object sender, RoutedEventArgs e)
         {
             var currentSide = ColorHelper.GetSideFromColor((SolidColorBrush)ellCurrentPlayer.Fill);
             bool isValidSkip = controller.ValidateSkipTurn(currentSide);
+
+            if (isValidSkip)
+            {
+                SwitchSide();
+            }
+            else
+            {
+                // Notify user
+
+            }
         }
     }
 }
