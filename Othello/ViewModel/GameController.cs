@@ -17,11 +17,14 @@ namespace Othello.ViewModel
         private readonly GameParam param;
 
         private Side[,] virtualGrid;
+        private Side[] possibleSkips;
 
         public GameController(GameView gameView, GameParam param)
         {
             this.gameView = gameView;
             this.param = param;
+
+            this.possibleSkips = new Side[2];
         }
 
         internal List<Field> FieldsToFlip { get; set; }
@@ -69,6 +72,39 @@ namespace Othello.ViewModel
 
             // No moves are possible -> it's valid to skip the turn.
             return true;
+        }
+
+        /// <summary>
+        /// Stores the sides who have skipped a turn at least once.
+        /// </summary>
+        internal void UpdateSkips(Side side)
+        {
+            if (possibleSkips[0] == Side.Empty && possibleSkips[1] == Side.Empty)
+            {
+                possibleSkips[0] = side;
+            }
+            else if (possibleSkips[0] != side && possibleSkips[1] != side)
+            {
+                possibleSkips[1] = side;
+            }
+        }
+
+        /// <summary>
+        /// Game rule: the game ends when both players are'nt able to move 
+        /// (i.e. have skipped a turn).
+        /// </summary>
+        /// <returns>True when the game is finished.</returns>
+        internal bool CheckSkips()
+        {
+            if (possibleSkips[0] != Side.Empty && possibleSkips[1] != Side.Empty
+                && possibleSkips[0] != possibleSkips[1])
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>

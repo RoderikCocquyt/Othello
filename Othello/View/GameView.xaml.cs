@@ -331,7 +331,16 @@ namespace Othello.View
 
             if (isValidSkip)
             {
-                SwitchSide();
+                controller.UpdateSkips(currentSide);
+                bool gameIsFinished = controller.CheckSkips();
+                if (gameIsFinished)
+                {
+                    EndGame();
+                }
+                else
+                {
+                    SwitchSide();
+                }
             }
             else
             {
@@ -346,6 +355,11 @@ namespace Othello.View
             {
                 lblSkipTurn.Content = string.Empty;
             }
+        }
+
+        private void EndGame()
+        {
+            // TODO: end game implementation
         }
     }
 }
