@@ -177,8 +177,8 @@ namespace Othello.ViewModel
             var nextFields = new List<Field>() { surroundingField };
             Field nextField = new Field(surroundingField.GridRow, surroundingField.GridColumn);
 
-            while (nextField.GridRow >= 0 && nextField.GridRow < param.NumberOfRows
-                && nextField.GridColumn >= 0 && nextField.GridColumn < param.NumberOfColumns)
+            while (nextField.GridRow > 0 && nextField.GridRow < param.NumberOfRows - 1
+                && nextField.GridColumn > 0 && nextField.GridColumn < param.NumberOfColumns - 1)
             {
                 nextField = new Field(nextField.GridRow + rowDiff, nextField.GridColumn + colDiff)
                 {
