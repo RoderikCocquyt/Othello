@@ -38,6 +38,11 @@ namespace Othello.ViewModel
             return isAllowedMove;
         }
 
+        internal bool ValidateSkipTurn(Side currentSide)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Checks whether the target disk already has a color.
         /// </summary>

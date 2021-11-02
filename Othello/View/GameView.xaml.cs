@@ -313,5 +313,11 @@ namespace Othello.View
                 }
             }
         }
+
+        private void btnSkipTurn_Click(object sender, RoutedEventArgs e)
+        {
+            var currentSide = ColorHelper.GetSideFromColor((SolidColorBrush)ellCurrentPlayer.Fill);
+            bool isValidSkip = controller.ValidateSkipTurn(currentSide);
+        }
     }
 }
