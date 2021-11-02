@@ -114,49 +114,49 @@ namespace Othello.ViewModel
                 // Right
                 if (surroundingField.GridRow == field.GridRow && surroundingField.GridColumn > field.GridColumn)
                 {
-                    fieldsToFlip = GetNextFields(field, surroundingField, fieldsToFlip, side, 0, 1);
+                    fieldsToFlip = GetNextFields(surroundingField, fieldsToFlip, side, 0, 1);
                 }
 
                 // Left
                 if (surroundingField.GridRow == field.GridRow && surroundingField.GridColumn < field.GridColumn)
                 {
-                    fieldsToFlip = GetNextFields(field, surroundingField, fieldsToFlip, side, 0, -1);
+                    fieldsToFlip = GetNextFields(surroundingField, fieldsToFlip, side, 0, -1);
                 }
 
                 // Top
                 if (surroundingField.GridRow < field.GridRow && surroundingField.GridColumn == field.GridColumn)
                 {
-                    fieldsToFlip = GetNextFields(field, surroundingField, fieldsToFlip, side, -1, 0);
+                    fieldsToFlip = GetNextFields(surroundingField, fieldsToFlip, side, -1, 0);
                 }
 
                 // Bottom
                 if (surroundingField.GridRow > field.GridRow && surroundingField.GridColumn == field.GridColumn)
                 {
-                    fieldsToFlip = GetNextFields(field, surroundingField, fieldsToFlip, side, 1, 0);
+                    fieldsToFlip = GetNextFields(surroundingField, fieldsToFlip, side, 1, 0);
                 }
 
                 // Bottom right
                 if (surroundingField.GridRow > field.GridRow && surroundingField.GridColumn > field.GridColumn)
                 {
-                    fieldsToFlip = GetNextFields(field, surroundingField, fieldsToFlip, side, 1, 1);
+                    fieldsToFlip = GetNextFields(surroundingField, fieldsToFlip, side, 1, 1);
                 }
 
                 // Bottom left
                 if (surroundingField.GridRow > field.GridRow && surroundingField.GridColumn < field.GridColumn)
                 {
-                    fieldsToFlip = GetNextFields(field, surroundingField, fieldsToFlip, side, 1, -1);
+                    fieldsToFlip = GetNextFields(surroundingField, fieldsToFlip, side, 1, -1);
                 }
 
                 // Top left
                 if (surroundingField.GridRow < field.GridRow && surroundingField.GridColumn < field.GridColumn)
                 {
-                    fieldsToFlip = GetNextFields(field, surroundingField, fieldsToFlip, side, -1, -1);
+                    fieldsToFlip = GetNextFields(surroundingField, fieldsToFlip, side, -1, -1);
                 }
 
                 // Top right
                 if (surroundingField.GridRow < field.GridRow && surroundingField.GridColumn > field.GridColumn)
                 {
-                    fieldsToFlip = GetNextFields(field, surroundingField, fieldsToFlip, side, -1, 1);
+                    fieldsToFlip = GetNextFields(surroundingField, fieldsToFlip, side, -1, 1);
                 }
             }
 
@@ -167,8 +167,7 @@ namespace Othello.ViewModel
             return true;
         }
 
-        private List<Field> GetNextFields(Field field, 
-                Field surroundingField,
+        private List<Field> GetNextFields(Field surroundingField,
                 List<Field> fieldsToFlip,
                 Side side, 
                 int rowDiff, 
