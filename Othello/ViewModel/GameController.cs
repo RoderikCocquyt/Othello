@@ -212,17 +212,14 @@ namespace Othello.ViewModel
                 int rowDiff, 
                 int colDiff)
         {
-            var nextFields = new List<Field>() { surroundingField };
-            Field nextField = new Field(surroundingField.GridRow, surroundingField.GridColumn);
-
-            while (nextField.GridRow > 0 && nextField.GridRow < param.NumberOfRows - 1
-                && nextField.GridColumn > 0 && nextField.GridColumn < param.NumberOfColumns - 1)
+            var nextFields = new List<Field>();
+            Field nextField = new Field(surroundingField.GridRow, surroundingField.GridColumn)
             {
-                nextField = new Field(nextField.GridRow + rowDiff, nextField.GridColumn + colDiff)
-                {
-                    Side = virtualGrid[nextField.GridRow + rowDiff, nextField.GridColumn + colDiff]
-                };
+                Side = surroundingField.Side 
+            };
 
+            do
+            {
                 if (nextField.Side == side)
                 {
                     fieldsToFlip.AddRange(nextFields);
@@ -236,7 +233,13 @@ namespace Othello.ViewModel
                 {
                     break;
                 }
-            }
+
+                nextField = new Field(nextField.GridRow + rowDiff, nextField.GridColumn + colDiff)
+                {
+                    Side = virtualGrid[nextField.GridRow + rowDiff, nextField.GridColumn + colDiff]
+                };
+            } while (nextField.GridRow > 0 && nextField.GridRow < param.NumberOfRows - 1
+                && nextField.GridColumn > 0 && nextField.GridColumn < param.NumberOfColumns - 1);
 
             return fieldsToFlip;
         }
