@@ -38,11 +38,23 @@ namespace Othello.View
         private void btnPlayers1_Checked(object sender, RoutedEventArgs e)
         {
             NumberOfPlayers = 1;
+            btnPlayers2.IsChecked = false;
         }
 
         private void btnPlayers2_Checked(object sender, RoutedEventArgs e)
         {
             NumberOfPlayers = 2;
+            btnPlayers1.IsChecked = false;
+        }
+
+        private void btnPlayers1_Unchecked(object sender, RoutedEventArgs e)
+        {
+            btnPlayers2.IsChecked = true;
+        }
+
+        private void btnPlayers2_Unchecked(object sender, RoutedEventArgs e)
+        {
+            btnPlayers1.IsChecked = true;
         }
     }
 }

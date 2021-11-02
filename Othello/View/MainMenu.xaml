@@ -8,8 +8,10 @@
         Title="MainMenu" Height="450" Width="800">
     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <RadioButton Name="btnPlayers1" GroupName="players" Content="One player" Checked="btnPlayers1_Checked" Margin="10"></RadioButton>
-            <RadioButton Name="btnPlayers2" GroupName="players" Content="Two players" Checked="btnPlayers2_Checked" IsChecked="true" Margin="10"></RadioButton>
+            <ToggleButton Name="btnPlayers1" Content="One player" Checked="btnPlayers1_Checked" 
+                          Unchecked="btnPlayers1_Unchecked"  Margin="10"></ToggleButton>
+            <ToggleButton Name="btnPlayers2" Content="Two players" Checked="btnPlayers2_Checked" 
+                          Unchecked="btnPlayers2_Unchecked" IsChecked="true" Margin="10"></ToggleButton>
         </StackPanel>
         <StackPanel Orientation="Vertical">
             <Button Name="btnNew" Content="New game" Click="btnNew_Click" Margin="10"></Button>
