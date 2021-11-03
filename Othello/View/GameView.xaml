@@ -7,6 +7,11 @@
         mc:Ignorable="d"
         Title="GameView" Height="550" Width="900">
     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel>
+            <Label Name="lblGameStatus" Height="50" Visibility="Hidden"></Label>
+            <Label Name="lblScoreBlack" Height="50" Visibility="Hidden"></Label>
+            <Label Name="lblScoreWhite" Height="50" Visibility="Hidden"></Label>
+        </StackPanel>
         <Grid Name="grdGame" Height="400" Width="400" ShowGridLines="false">
         </Grid>
         <DockPanel VerticalAlignment="Center">
