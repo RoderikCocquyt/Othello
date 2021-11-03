@@ -16,15 +16,17 @@ namespace Othello.ViewModel
         private readonly GameView gameView;
         private readonly GameParam param;
 
-        private Side[,] virtualGrid;
         private HashSet<Side> possibleSkips = new HashSet<Side>();
+        private Dictionary<Side, int> scores = new Dictionary<Side, int>();
 
         public GameController(GameView gameView, GameParam param)
         {
             this.gameView = gameView;
             this.param = param;
+            VirtualGrid = new Side[param.NumberOfRows, param.NumberOfColumns];
         }
 
+        internal Side[,] VirtualGrid { get; set; }
         internal List<Field> FieldsToFlip { get; set; }
 
         internal bool ValidateDropTarget(Ellipse dropTarget, Side side)
@@ -48,12 +50,12 @@ namespace Othello.ViewModel
         /// <returns>True when the turn can be skipped.</returns>
         internal bool ValidateSkipTurn(Side currentSide)
         {
-            for (int row = 0; row < virtualGrid.GetLength(0); row++)
+            for (int row = 0; row < VirtualGrid.GetLength(0); row++)
             {
-                for (int col = 0; col < virtualGrid.GetLength(1); col++)
+                for (int col = 0; col < VirtualGrid.GetLength(1); col++)
                 {
                     // Only check empty fields as all the other fields are occupied already.
-                    if (virtualGrid[row, col] != Side.Empty)
+                    if (VirtualGrid[row, col] != Side.Empty)
                     {
                         continue;
                     }
@@ -258,7 +260,7 @@ namespace Othello.ViewModel
 
                 nextField = new Field(nextField.GridRow + rowDiff, nextField.GridColumn + colDiff)
                 {
-                    Side = virtualGrid[nextField.GridRow + rowDiff, nextField.GridColumn + colDiff]
+                    Side = VirtualGrid[nextField.GridRow + rowDiff, nextField.GridColumn + colDiff]
                 };
             } while (nextField.GridRow > 0 && nextField.GridRow < param.NumberOfRows - 1
                 && nextField.GridColumn > 0 && nextField.GridColumn < param.NumberOfColumns - 1);
@@ -276,13 +278,8 @@ namespace Othello.ViewModel
 
             return new Field(gridRow, gridCol)
             {
-                Side = virtualGrid[gridRow, gridCol]
+                Side = VirtualGrid[gridRow, gridCol]
             };
-        }
-
-        internal void SetVirtualGrid(Side[,] virtualGrid)
-        {
-            this.virtualGrid = virtualGrid;
         }
     }
 }

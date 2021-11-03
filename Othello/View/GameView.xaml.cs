@@ -30,8 +30,6 @@ namespace Othello.View
         private readonly GameParam param;
         private readonly GameController controller;
 
-        private Side[,] virtualGrid;
-
         public GameView()
         {
             InitializeComponent();
@@ -41,27 +39,11 @@ namespace Othello.View
             : this()
         {
             this.numberOfPlayers = numberOfPlayers;
-            this.virtualGrid = new Side[NumberOfRows, NumberOfColumns];
             this.param = new GameParam(numberOfPlayers, NumberOfRows, NumberOfColumns);
             this.controller = new GameController(this, this.param);
 
             BuildGrid();
             InitializeGrid();
-        }
-
-        internal Side[,] VirtualGrid
-        {
-            get => virtualGrid;
-            set
-            {
-                if (value == virtualGrid)
-                {
-                    return;
-                }
-
-                virtualGrid = value;
-                controller.SetVirtualGrid(virtualGrid);
-            }
         }
 
         internal Ellipse SourceDisk { get; set; }
@@ -71,7 +53,7 @@ namespace Othello.View
             // Update virtual grid
             foreach (var field in fields)
             {
-                VirtualGrid[field.GridRow, field.GridColumn] = side;
+                controller.VirtualGrid[field.GridRow, field.GridColumn] = side;
             }
 
             // Set disk color in the grid
@@ -172,8 +154,6 @@ namespace Othello.View
         {
             var centerFields = GetCenter();
             SetCenter(centerFields);
-
-            controller.SetVirtualGrid(VirtualGrid);
         }
 
         private List<Field> GetCenter()
@@ -197,7 +177,7 @@ namespace Othello.View
             // Set the center in the virtual grid
             foreach (var field in centerFields)
             {
-                VirtualGrid[field.GridRow, field.GridColumn] = field.Side;
+                controller.VirtualGrid[field.GridRow, field.GridColumn] = field.Side;
             }
 
             // Set disk color in the grid
@@ -301,7 +281,7 @@ namespace Othello.View
 
                         // Update virtual grid
                         var targetField = targetDisk.Tag as Field;
-                        VirtualGrid[targetField.GridRow, targetField.GridColumn] = currentSide;
+                        controller.VirtualGrid[targetField.GridRow, targetField.GridColumn] = currentSide;
 
                         ExecuteMove(currentSide);
                     }
