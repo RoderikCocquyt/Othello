@@ -13,15 +13,13 @@ namespace Othello.ViewModel
 {
     public class GameController
     {
-        private readonly GameView gameView;
         private readonly GameParam param;
 
         private HashSet<Side> possibleSkips = new HashSet<Side>();
         private Dictionary<Side, int> scores = new Dictionary<Side, int>();
 
-        public GameController(GameView gameView, GameParam param)
+        public GameController(GameParam param)
         {
-            this.gameView = gameView;
             this.param = param;
             VirtualGrid = new Side[param.NumberOfRows, param.NumberOfColumns];
         }
