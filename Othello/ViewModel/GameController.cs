@@ -22,7 +22,7 @@ namespace Othello.ViewModel
         {
             this.param = param;
             VirtualGrid = new Side[param.NumberOfRows, param.NumberOfColumns];
-            Scores = new Dictionary<Side, int>() { { Side.Black, 0 } { Side.White, 0 } };
+            Scores = new Dictionary<Side, int>() { { Side.Black, 0 }, { Side.White, 0 } };
         }
 
         internal Side[,] VirtualGrid { get; set; }
