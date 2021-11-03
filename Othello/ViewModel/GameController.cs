@@ -17,14 +17,12 @@ namespace Othello.ViewModel
         private readonly GameParam param;
 
         private Side[,] virtualGrid;
-        private Side[] possibleSkips;
+        private HashSet<Side> possibleSkips = new HashSet<Side>();
 
         public GameController(GameView gameView, GameParam param)
         {
             this.gameView = gameView;
             this.param = param;
-
-            this.possibleSkips = new Side[2];
         }
 
         internal List<Field> FieldsToFlip { get; set; }
@@ -79,13 +77,9 @@ namespace Othello.ViewModel
         /// </summary>
         internal void UpdateSkips(Side side)
         {
-            if (possibleSkips[0] == Side.Empty && possibleSkips[1] == Side.Empty)
+            if (!possibleSkips.Contains(side))
             {
-                possibleSkips[0] = side;
-            }
-            else if (possibleSkips[0] != side && possibleSkips[1] != side)
-            {
-                possibleSkips[1] = side;
+                possibleSkips.Add(side);
             }
         }
 
@@ -96,8 +90,7 @@ namespace Othello.ViewModel
         /// <returns>True when the game is finished.</returns>
         internal bool CheckSkips()
         {
-            if (possibleSkips[0] != Side.Empty && possibleSkips[1] != Side.Empty
-                && possibleSkips[0] != possibleSkips[1])
+            if (possibleSkips.Contains(Side.Black) && possibleSkips.Contains(Side.White))
             {
                 return true;
             }
