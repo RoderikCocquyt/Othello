@@ -90,14 +90,7 @@ namespace Othello.ViewModel
         /// <returns>True when the game is finished.</returns>
         internal bool CheckSkips()
         {
-            if (possibleSkips.Contains(Side.Black) && possibleSkips.Contains(Side.White))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return possibleSkips.Contains(Side.Black) && possibleSkips.Contains(Side.White);
         }
 
         /// <summary>
