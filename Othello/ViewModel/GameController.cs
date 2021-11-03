@@ -22,10 +22,38 @@ namespace Othello.ViewModel
         {
             this.param = param;
             VirtualGrid = new Side[param.NumberOfRows, param.NumberOfColumns];
+            Scores = new Dictionary<Side, int>() { { Side.Black, 0 } { Side.White, 0 } };
         }
 
         internal Side[,] VirtualGrid { get; set; }
         internal List<Field> FieldsToFlip { get; set; }
+        internal Dictionary<Side, int> Scores
+        {
+            get
+            {
+                int totalDisksBlack = 0;
+                int totalDisksWhite = 0;
+
+                foreach (Side side in VirtualGrid)
+                {
+                    if (side == Side.Black)
+                    {
+                        totalDisksBlack++;
+                    }
+
+                    if (side == Side.White)
+                    {
+                        totalDisksWhite++;
+                    }
+                }
+
+                scores[Side.Black] = totalDisksBlack;
+                scores[Side.White] = totalDisksWhite;
+                return scores;
+            }
+
+            set => scores = value;
+        }
 
         internal bool ValidateDropTarget(Ellipse dropTarget, Side side)
         {

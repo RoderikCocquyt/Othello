@@ -29,6 +29,8 @@ namespace Othello.View
         private readonly GameParam param;
         private readonly GameController controller;
 
+        private Dictionary<Side, int> scores;
+
         public GameView()
         {
             InitializeComponent();
@@ -333,6 +335,11 @@ namespace Othello.View
             {
                 lblSkipTurn.Content = string.Empty;
             }
+        }
+
+        private void GetScores()
+        {
+            scores = controller.Scores;
         }
 
         private void EndGame()
