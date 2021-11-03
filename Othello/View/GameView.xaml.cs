@@ -38,7 +38,7 @@ namespace Othello.View
             : this()
         {
             this.param = new GameParam(numberOfPlayers, NumberOfRows, NumberOfColumns);
-            this.controller = new GameController(this, this.param);
+            this.controller = new GameController(this.param);
 
             BuildGrid();
             InitializeGrid();
