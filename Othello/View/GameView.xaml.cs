@@ -23,7 +23,6 @@ namespace Othello.View
     /// </summary>
     public partial class GameView : Window
     {
-        private readonly int numberOfPlayers;
         private const int NumberOfRows = 8;
         private const int NumberOfColumns = 8;
 
@@ -38,7 +37,6 @@ namespace Othello.View
         public GameView(int numberOfPlayers)
             : this()
         {
-            this.numberOfPlayers = numberOfPlayers;
             this.param = new GameParam(numberOfPlayers, NumberOfRows, NumberOfColumns);
             this.controller = new GameController(this, this.param);
 
