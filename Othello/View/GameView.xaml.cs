@@ -344,7 +344,25 @@ namespace Othello.View
 
         private void EndGame()
         {
-            // TODO: end game implementation
+            grdNewDisk.IsEnabled = false;
+            btnSkipTurn.IsEnabled = false;
+            
+            GetScores();
+
+            string winner = scores[Side.Black] > scores[Side.White] 
+                    ? Side.Black.ToString() 
+                    : Side.White.ToString();
+            string gameStatus = "Game over! Winner: " + winner;
+            lblGameStatus.Visibility = Visibility.Visible;
+            lblGameStatus.Content = gameStatus;
+
+            string scoreBlack = $"Score of player {Side.Black.ToString()}: {scores[Side.Black]} disks";
+            lblScoreBlack.Visibility = Visibility.Visible;
+            lblScoreBlack.Content = scoreBlack;
+
+            string scoreWhite = $"Score of player {Side.White.ToString()}: {scores[Side.White]} disks";
+            lblScoreWhite.Visibility = Visibility.Visible;
+            lblScoreWhite.Content = scoreBlack;
         }
     }
 }
