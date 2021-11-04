@@ -258,24 +258,34 @@ namespace Othello.ViewModel
 
         private List<Field> GetNextFields(Field surroundingField,
                 List<Field> fieldsToFlip,
-                Side side, 
+                Side currentSide, 
                 int rowDiff, 
                 int colDiff)
         {
             var nextFields = new List<Field>();
-            Field nextField = new Field(surroundingField.GridRow, surroundingField.GridColumn)
-            {
+
+            // We've only selected surrounding fields of the opposite color.
+            // Therefore, the first field, the surrounding field, is certainly of the opposite color.
+            Field nextField = new Field(surroundingField.GridRow, surroundingField.GridColumn) 
+            { 
                 Side = surroundingField.Side 
             };
+            nextFields.Add(nextField);
 
-            do
+            while (nextField.GridRow > 0 && nextField.GridRow < param.NumberOfRows - 1
+                && nextField.GridColumn > 0 && nextField.GridColumn < param.NumberOfColumns - 1)
             {
-                if (nextField.Side == side)
+                nextField = new Field(nextField.GridRow + rowDiff, nextField.GridColumn + colDiff)
+                {
+                    Side = VirtualGrid[nextField.GridRow + rowDiff, nextField.GridColumn + colDiff]
+                };
+
+                if (nextField.Side == currentSide)
                 {
                     fieldsToFlip.AddRange(nextFields);
                     break;
                 }
-                else if (nextField.Side != Side.Empty)
+                else if (nextField.Side != Side.Empty) // = opposite side
                 {
                     nextFields.Add(nextField);
                 }
@@ -283,13 +293,7 @@ namespace Othello.ViewModel
                 {
                     break;
                 }
-
-                nextField = new Field(nextField.GridRow + rowDiff, nextField.GridColumn + colDiff)
-                {
-                    Side = VirtualGrid[nextField.GridRow + rowDiff, nextField.GridColumn + colDiff]
-                };
-            } while (nextField.GridRow > 0 && nextField.GridRow < param.NumberOfRows - 1
-                && nextField.GridColumn > 0 && nextField.GridColumn < param.NumberOfColumns - 1);
+            }
 
             return fieldsToFlip;
         }
