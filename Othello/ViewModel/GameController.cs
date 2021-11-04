@@ -198,49 +198,57 @@ namespace Othello.ViewModel
                 // Right
                 if (surroundingField.GridRow == field.GridRow && surroundingField.GridColumn > field.GridColumn)
                 {
-                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, 0, 1);
+                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, 0, 1,
+                        0, param.NumberOfRows - 1, 1, param.NumberOfColumns - 2);
                 }
 
                 // Left
                 if (surroundingField.GridRow == field.GridRow && surroundingField.GridColumn < field.GridColumn)
                 {
-                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, 0, -1);
+                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, 0, -1,
+                        0, param.NumberOfRows - 1, 1, param.NumberOfColumns - 2);
                 }
 
                 // Top
                 if (surroundingField.GridRow < field.GridRow && surroundingField.GridColumn == field.GridColumn)
                 {
-                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, -1, 0);
+                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, -1, 0,
+                        1, param.NumberOfRows - 2, 0, param.NumberOfColumns - 1);
                 }
 
                 // Bottom
                 if (surroundingField.GridRow > field.GridRow && surroundingField.GridColumn == field.GridColumn)
                 {
-                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, 1, 0);
+                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, 1, 0,
+                        1, param.NumberOfRows - 2, 0, param.NumberOfColumns - 1);
                 }
 
                 // Bottom right
                 if (surroundingField.GridRow > field.GridRow && surroundingField.GridColumn > field.GridColumn)
                 {
-                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, 1, 1);
+                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, 1, 1,
+                        1, param.NumberOfRows - 2, 1, param.NumberOfColumns - 2);
                 }
 
                 // Bottom left
                 if (surroundingField.GridRow > field.GridRow && surroundingField.GridColumn < field.GridColumn)
                 {
-                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, 1, -1);
+                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, 1, -1,
+                        1, param.NumberOfRows - 2, 1, param.NumberOfColumns - 2);
                 }
 
                 // Top left
                 if (surroundingField.GridRow < field.GridRow && surroundingField.GridColumn < field.GridColumn)
                 {
-                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, -1, -1);
+                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, -1, -1,
+                        1, param.NumberOfRows - 2, 1, param.NumberOfColumns - 2);
                 }
 
                 // Top right
                 if (surroundingField.GridRow < field.GridRow && surroundingField.GridColumn > field.GridColumn)
                 {
-                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, -1, 1);
+                    FieldsToFlip = GetNextFields(surroundingField, FieldsToFlip, currentSide, -1, 1,
+                        1, param.NumberOfRows - 2, 1, param.NumberOfColumns - 2);
                 }
             }
 
@@ -260,20 +268,24 @@ namespace Othello.ViewModel
                 List<Field> fieldsToFlip,
                 Side currentSide, 
                 int rowDiff, 
-                int colDiff)
+                int colDiff,
+                int minRow,
+                int maxRow,
+                int minCol,
+                int maxCol)
         {
             var nextFields = new List<Field>();
 
             // We've only selected surrounding fields of the opposite color.
             // Therefore, the first field, the surrounding field, is certainly of the opposite color.
-            Field nextField = new Field(surroundingField.GridRow, surroundingField.GridColumn) 
-            { 
+            Field nextField = new Field(surroundingField.GridRow, surroundingField.GridColumn)
+            {
                 Side = surroundingField.Side 
             };
             nextFields.Add(nextField);
 
-            while (nextField.GridRow > 0 && nextField.GridRow < param.NumberOfRows - 1
-                && nextField.GridColumn > 0 && nextField.GridColumn < param.NumberOfColumns - 1)
+            while (nextField.GridRow >= minRow && nextField.GridRow <= maxRow
+                && nextField.GridColumn >= minCol && nextField.GridColumn <= maxCol)
             {
                 nextField = new Field(nextField.GridRow + rowDiff, nextField.GridColumn + colDiff)
                 {
