@@ -362,7 +362,7 @@ namespace Othello.View
 
             string scoreWhite = $"Score of player {Side.White.ToString()}: {scores[Side.White]} disks";
             lblScoreWhite.Visibility = Visibility.Visible;
-            lblScoreWhite.Content = scoreBlack;
+            lblScoreWhite.Content = scoreWhite;
         }
     }
 }
