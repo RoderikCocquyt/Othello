@@ -12,8 +12,7 @@ namespace Othello.View.Utils
         internal static Brush GetOppositeColor(Brush currentColor)
         {
             Side currentSide = GetSideFromColor((SolidColorBrush)currentColor);
-            bool currentSideIsBlack = (int)currentSide == 1;
-            Side oppositeSide = currentSideIsBlack ? Side.White : Side.Black;
+            Side oppositeSide = currentSide.GetOppositeSide();
             Brush oppositeColor = GetColorFromSide(oppositeSide);
 
             return oppositeColor;
