@@ -279,11 +279,7 @@ namespace Othello.View
                     if (controller.ValidateDropTarget(targetDisk, currentSide))
                     {
                         UpdateTargetDiskAppearance(targetDisk, currentSide, currentColor);
-                        
-                        // Update virtual grid
-                        var targetField = targetDisk.Tag as Field;
-                        controller.VirtualGrid[targetField.GridRow, targetField.GridColumn] = currentSide;
-
+                        UpdateVirtualGridField(targetDisk.Tag as Field, currentSide);
                         ExecuteMove(currentSide);
                     }
                 }
@@ -329,6 +325,11 @@ namespace Othello.View
             Brush oppositeColor = ColorHelper.GetColorFromSide(oppositeSide);
 
             return oppositeColor;
+        }
+
+        private void UpdateVirtualGridField(Field field, Side side)
+        {
+            controller.VirtualGrid[field.GridRow, field.GridColumn] = side;
         }
 
         private void ExecuteMove(Side currentSide)
