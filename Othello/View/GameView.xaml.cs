@@ -54,7 +54,7 @@ namespace Othello.View
             // Update virtual grid
             foreach (var field in fields)
             {
-                controller.VirtualGrid[field.GridRow, field.GridColumn] = side;
+                UpdateVirtualGridField(field, side);
             }
 
             // Set disk color in the grid
@@ -179,7 +179,7 @@ namespace Othello.View
             // Set the center in the virtual grid
             foreach (var field in centerFields)
             {
-                controller.VirtualGrid[field.GridRow, field.GridColumn] = field.Side;
+                UpdateVirtualGridField(field, field.Side);
             }
 
             // Set disk color in the grid
@@ -327,6 +327,10 @@ namespace Othello.View
             return oppositeColor;
         }
 
+        /// <summary>
+        /// Sets a field in the virtual grid to the designated side.
+        /// </summary>
+        /// <param name="side">The field to update.</param>
         private void UpdateVirtualGridField(Field field, Side side)
         {
             controller.VirtualGrid[field.GridRow, field.GridColumn] = side;
