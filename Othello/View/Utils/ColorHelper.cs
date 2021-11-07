@@ -9,6 +9,16 @@ namespace Othello.View.Utils
 {
     internal static class ColorHelper
     {
+        internal static Brush GetOppositeColor(Brush currentColor)
+        {
+            Side currentSide = GetSideFromColor((SolidColorBrush)currentColor);
+            bool currentSideIsBlack = (int)currentSide == 1;
+            Side oppositeSide = currentSideIsBlack ? Side.White : Side.Black;
+            Brush oppositeColor = GetColorFromSide(oppositeSide);
+
+            return oppositeColor;
+        }
+
         internal static SolidColorBrush GetColorFromSide(Side side)
         {
             var color = new SolidColorBrush((Color)ColorConverter.ConvertFromString(side.ToString()));

@@ -314,18 +314,8 @@ namespace Othello.View
         /// </param>
         private void HighlightDisk(Ellipse disk, bool isHighlighted = true)
         {
-            disk.Stroke = isHighlighted ? GetOppositeColor(disk.Fill) : disk.Fill;
+            disk.Stroke = isHighlighted ? ColorHelper.GetOppositeColor(disk.Fill) : disk.Fill;
             disk.StrokeThickness = isHighlighted ? 2 : 1;
-        }
-
-        private Brush GetOppositeColor(Brush currentColor)
-        {
-            Side currentSide = ColorHelper.GetSideFromColor((SolidColorBrush)currentColor);
-            bool currentSideIsBlack = (int)currentSide == 1;
-            Side oppositeSide = currentSideIsBlack ? Side.White : Side.Black;
-            Brush oppositeColor = ColorHelper.GetColorFromSide(oppositeSide);
-
-            return oppositeColor;
         }
 
         /// <summary>
