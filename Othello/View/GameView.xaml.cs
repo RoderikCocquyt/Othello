@@ -29,6 +29,7 @@ namespace Othello.View
         private readonly GameParam param;
         private readonly GameController controller;
 
+        private Ellipse previousTargetDisk;
         private Dictionary<Side, int> scores;
 
         public GameView()
@@ -76,6 +77,7 @@ namespace Othello.View
                 Ellipse circle = GetEllipse(grdField);
                 SolidColorBrush color = ColorHelper.GetColorFromSide(side);
                 circle.Fill = color;
+                circle.Stroke = color;
             }
         }
 
@@ -270,15 +272,14 @@ namespace Othello.View
                         return;
                     }
 
-                    Brush color = (Brush)e.Data.GetData("Brush");
+                    Brush currentColor = (Brush)e.Data.GetData("Brush");
+                    Side currentSide = ColorHelper.GetSideFromColor((SolidColorBrush)currentColor);
                     var targetDisk = child as Ellipse;
-                    Side currentSide = ColorHelper.GetSideFromColor((SolidColorBrush)color);
 
                     if (controller.ValidateDropTarget(targetDisk, currentSide))
                     {
-                        // Draw disk
-                        targetDisk.Fill = color;
-
+                        UpdateTargetDiskAppearance(targetDisk, currentSide, currentColor);
+                        
                         // Update virtual grid
                         var targetField = targetDisk.Tag as Field;
                         controller.VirtualGrid[targetField.GridRow, targetField.GridColumn] = currentSide;
@@ -294,6 +295,40 @@ namespace Othello.View
                     rect.StrokeThickness = 1;
                 }
             }
+        }
+
+        private void UpdateTargetDiskAppearance(Ellipse targetDisk, Side currentSide, Brush currentColor)
+        {
+            // First, give the previously highlighted disk its original appearance.
+            if (previousTargetDisk != null)
+            {
+                HighlightDisk(previousTargetDisk, Side.Empty, false);
+            }
+
+            targetDisk.Fill = currentColor;
+            previousTargetDisk = targetDisk;    // Save the current target disk to reset its appearance in the next move.
+            HighlightDisk(targetDisk, currentSide, true);
+        }
+
+        /// <summary>
+        /// A disk is highlighted when it's placed during the last move.
+        /// </summary>
+        /// <param name="isHighlighted">
+        /// Toggle value. True to highlight, false to give a disk its normal appearance.
+        /// </param>
+        private void HighlightDisk(Ellipse disk, Side currentSide, bool isHighlighted = true)
+        {
+            disk.Stroke = isHighlighted ? GetOppositeColor(currentSide) : disk.Fill;
+            disk.StrokeThickness = isHighlighted ? 2 : 1;
+        }
+
+        private Brush GetOppositeColor(Side currentSide)
+        {
+            bool currentSideIsBlack = (int)currentSide == 1;
+            Side oppositeSide = currentSideIsBlack ? Side.White : Side.Black;
+            Brush oppositeColor = ColorHelper.GetColorFromSide(oppositeSide);
+
+            return oppositeColor;
         }
 
         private void ExecuteMove(Side currentSide)
