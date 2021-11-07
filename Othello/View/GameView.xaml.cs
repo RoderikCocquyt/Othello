@@ -278,7 +278,7 @@ namespace Othello.View
 
                     if (controller.ValidateDropTarget(targetDisk, currentSide))
                     {
-                        UpdateTargetDiskAppearance(targetDisk, currentSide, currentColor);
+                        UpdateTargetDiskAppearance(targetDisk, currentColor);
                         UpdateVirtualGridField(targetDisk.Tag as Field, currentSide);
                         ExecuteMove(currentSide);
                     }
@@ -293,17 +293,17 @@ namespace Othello.View
             }
         }
 
-        private void UpdateTargetDiskAppearance(Ellipse targetDisk, Side currentSide, Brush currentColor)
+        private void UpdateTargetDiskAppearance(Ellipse targetDisk, Brush currentColor)
         {
             // First, give the previously highlighted disk its original appearance.
             if (previousTargetDisk != null)
             {
-                HighlightDisk(previousTargetDisk, Side.Empty, false);
+                HighlightDisk(previousTargetDisk, false);
             }
 
             targetDisk.Fill = currentColor;
             previousTargetDisk = targetDisk;    // Save the current target disk to reset its appearance in the next move.
-            HighlightDisk(targetDisk, currentSide, true);
+            HighlightDisk(targetDisk, true);
         }
 
         /// <summary>
@@ -312,14 +312,15 @@ namespace Othello.View
         /// <param name="isHighlighted">
         /// Toggle value. True to highlight, false to give a disk its normal appearance.
         /// </param>
-        private void HighlightDisk(Ellipse disk, Side currentSide, bool isHighlighted = true)
+        private void HighlightDisk(Ellipse disk, bool isHighlighted = true)
         {
-            disk.Stroke = isHighlighted ? GetOppositeColor(currentSide) : disk.Fill;
+            disk.Stroke = isHighlighted ? GetOppositeColor(disk.Fill) : disk.Fill;
             disk.StrokeThickness = isHighlighted ? 2 : 1;
         }
 
-        private Brush GetOppositeColor(Side currentSide)
+        private Brush GetOppositeColor(Brush currentColor)
         {
+            Side currentSide = ColorHelper.GetSideFromColor((SolidColorBrush)currentColor);
             bool currentSideIsBlack = (int)currentSide == 1;
             Side oppositeSide = currentSideIsBlack ? Side.White : Side.Black;
             Brush oppositeColor = ColorHelper.GetColorFromSide(oppositeSide);
