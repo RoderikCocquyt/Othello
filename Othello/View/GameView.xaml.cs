@@ -30,6 +30,7 @@ namespace Othello.View
         private readonly GameController controller;
 
         private Ellipse previousTargetDisk;
+        private List<Quadrant> quadrants = new List<Quadrant>();
         private Dictionary<Side, int> scores;
 
         public GameView()
@@ -209,7 +210,22 @@ namespace Othello.View
 
         private void BuildQuadrants()
         {
-            // TODO: implement
+            if (NumberOfRows % 2 != 0 || NumberOfColumns % 2 != 0)
+            {
+                throw new ApplicationException("The number of rows and the number of columns must be an even number.");
+            }
+
+            quadrants = new List<Quadrant>()
+            {
+                new Quadrant(Direction.TopLeft,
+                        0, NumberOfRows / 2 - 1, 0, NumberOfColumns / 2 - 1),
+                new Quadrant(Direction.TopRight,
+                        0, NumberOfRows / 2 - 1, NumberOfColumns / 2, NumberOfColumns - 1),
+                new Quadrant(Direction.BottomLeft,
+                        NumberOfRows / 2, NumberOfRows - 1, 0, NumberOfColumns / 2 - 1),
+                new Quadrant(Direction.BottomRight,
+                        NumberOfRows / 2, NumberOfRows - 1, NumberOfColumns / 2, NumberOfColumns - 1),
+            };
         }
 
         private Ellipse GetEllipse(Grid grdField)

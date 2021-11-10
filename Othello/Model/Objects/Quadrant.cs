@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Othello.Model.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,14 +7,16 @@ namespace Othello.Model.Objects
 {
     public class Quadrant
     {
-        public Quadrant(int firstRow, int lastRow, int firstColumn, int lastColumn)
+        public Quadrant(Direction direction, int firstRow, int lastRow, int firstColumn, int lastColumn)
         {
+            Direction = direction;
             FirstRow = firstRow;
             LastRow = lastRow;
             FirstColumn = firstColumn;
             LastColumn = lastColumn;
         }
-        
+
+        public Direction Direction { get; set; }
         public int FirstRow { get; set; }
         public int LastRow { get; set; }
         public int FirstColumn { get; set; }
