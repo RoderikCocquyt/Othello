@@ -12,8 +12,18 @@
             <Label Name="lblScoreBlack" Height="50" Visibility="Hidden"></Label>
             <Label Name="lblScoreWhite" Height="50" Visibility="Hidden"></Label>
         </StackPanel>
-        <Grid Name="grdGame" Height="400" Width="400" ShowGridLines="false">
-        </Grid>
+        <StackPanel Orientation="Horizontal">
+            <DockPanel>
+                <Label Name="lblFlippedDisksTopLeft" DockPanel.Dock="Top" Height="50" Visibility="Hidden"></Label>
+                <Label Name="lblFlippedDisksBottomLeft" DockPanel.Dock="Bottom" Height="50" Visibility="Hidden"></Label>
+            </DockPanel>
+            <Grid Name="grdGame" Height="400" Width="400" ShowGridLines="false">
+            </Grid>
+            <DockPanel>
+                <Label Name="lblFlippedDisksTopRight" DockPanel.Dock="Top" Height="50" Visibility="Hidden"></Label>
+                <Label Name="lblFlippedDisksBottomRight" DockPanel.Dock="Bottom" Height="50" Visibility="Hidden"></Label>
+            </DockPanel>
+        </StackPanel>
         <DockPanel VerticalAlignment="Center">
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                 <Grid Name="grdNewDisk" Margin="50">
