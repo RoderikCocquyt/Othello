@@ -156,6 +156,8 @@ namespace Othello.View
         {
             var centerFields = GetCenter();
             SetCenter(centerFields);
+
+            BuildQuadrants();
         }
 
         private List<Field> GetCenter()
@@ -203,6 +205,11 @@ namespace Othello.View
                 SolidColorBrush color = ColorHelper.GetColorFromSide(centerField.Side);
                 circle.Fill = color;
             }
+        }
+
+        private void BuildQuadrants()
+        {
+            // TODO: implement
         }
 
         private Ellipse GetEllipse(Grid grdField)
@@ -330,9 +337,15 @@ namespace Othello.View
         private void ExecuteMove(Side currentSide)
         {
             FlipDisks(controller.FieldsToFlip, currentSide);
+            ShowNumberOfFlippedDisks(controller.FieldsToFlip);
             SwitchSide();
 
             ResetLblSkipTurn();
+        }
+
+        private void ShowNumberOfFlippedDisks(List<Field> fieldsToFlip)
+        {
+            // TODO: implement
         }
 
         private void btnSkipTurn_Click(object sender, RoutedEventArgs e)
