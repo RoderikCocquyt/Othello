@@ -21,6 +21,7 @@ namespace Othello.Model.Objects
         public int LastRow { get; set; }
         public int FirstColumn { get; set; }
         public int LastColumn { get; set; }
+        public int NumberOfFields { get; set; }
 
         public bool ContainsField(Field field)
         {

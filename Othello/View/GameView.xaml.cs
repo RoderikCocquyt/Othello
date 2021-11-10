@@ -361,7 +361,38 @@ namespace Othello.View
 
         private void ShowNumberOfFlippedDisks(List<Field> fieldsToFlip)
         {
-            // TODO: implement
+            Quadrant quadrantHavingMostFields = GetQuadrantHavingMostFields(fieldsToFlip);
+            Label displayLabel = GetLabelToUseForDisplay(quadrantHavingMostFields);
+
+            // TODO: ShowNumberOfFlippedDisks
+        }
+
+        private Quadrant GetQuadrantHavingMostFields(List<Field> fieldsToFlip)
+        {
+            quadrants.Select(q => q.NumberOfFields = 0);
+            foreach (Field field in fieldsToFlip)
+            {
+                foreach (Quadrant quadrant in quadrants)
+                {
+                    if (quadrant.ContainsField(field))
+                    {
+                        quadrant.NumberOfFields++;
+                    }
+                }
+            }
+
+            Quadrant quadrantHavingMostFields = quadrants
+                    .Where(q => q.NumberOfFields == quadrants.Max(q => q.NumberOfFields))
+                    .FirstOrDefault();
+            return quadrantHavingMostFields;
+        }
+
+        private Label GetLabelToUseForDisplay(Quadrant quadrant)
+        {
+            string searchString = "lblFlippedDisks" + quadrant.Direction.ToString();
+
+            // TODO: get label
+            return null;
         }
 
         private void btnSkipTurn_Click(object sender, RoutedEventArgs e)
