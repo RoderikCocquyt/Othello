@@ -14,14 +14,18 @@
         </StackPanel>
         <StackPanel Name="pnlGrdGame" Orientation="Horizontal">
             <DockPanel>
-                <Label Name="lblFlippedDisksTopLeft" DockPanel.Dock="Top" Height="50" Visibility="Hidden"></Label>
-                <Label Name="lblFlippedDisksBottomLeft" DockPanel.Dock="Bottom" Height="50" Visibility="Hidden"></Label>
+                <Label Name="lblFlippedDisksTopLeft" DockPanel.Dock="Top" Height="50" 
+                       Content="FlippedDisksTopLeft" Visibility="Hidden"></Label>
+                <Label Name="lblFlippedDisksBottomLeft" DockPanel.Dock="Bottom" Height="50" 
+                       Content="FlippedDisksBottomLeft" Visibility="Hidden"></Label>
             </DockPanel>
             <Grid Name="grdGame" Height="400" Width="400" ShowGridLines="false">
             </Grid>
             <DockPanel>
-                <Label Name="lblFlippedDisksTopRight" DockPanel.Dock="Top" Height="50" Visibility="Hidden"></Label>
-                <Label Name="lblFlippedDisksBottomRight" DockPanel.Dock="Bottom" Height="50" Visibility="Hidden"></Label>
+                <Label Name="lblFlippedDisksTopRight" DockPanel.Dock="Top" Height="50" 
+                       Content="FlippedDisksTopRoght" Visibility="Hidden"></Label>
+                <Label Name="lblFlippedDisksBottomRight" DockPanel.Dock="Bottom" Height="50" 
+                       Content="FlippedDisksBottomRight" Visibility="Hidden"></Label>
             </DockPanel>
         </StackPanel>
         <DockPanel VerticalAlignment="Center">

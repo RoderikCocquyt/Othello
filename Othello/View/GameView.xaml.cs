@@ -361,10 +361,17 @@ namespace Othello.View
 
         private void ShowNumberOfFlippedDisks(List<Field> fieldsToFlip)
         {
+            if (fieldsToFlip.Count == 0)
+            {
+                return;
+            }
+
             Quadrant quadrantHavingMostFields = GetQuadrantHavingMostFields(fieldsToFlip);
             Label displayLabel = GetLabelToUseForDisplay(quadrantHavingMostFields);
+            displayLabel.Visibility = Visibility.Visible;
+            displayLabel.Content = fieldsToFlip.Count.ToString();
 
-            // TODO: ShowNumberOfFlippedDisks
+            // TODO: set visibility to hidden again
         }
 
         private Quadrant GetQuadrantHavingMostFields(List<Field> fieldsToFlip)
@@ -391,14 +398,22 @@ namespace Othello.View
         {
             string searchString = "lblFlippedDisks" + quadrant.Direction.ToString();
 
-            foreach (var child in pnlGrdGame.Children)
+            foreach (var stackPanelChild in pnlGrdGame.Children)
             {
-                if (child is Label)
+                if (!(stackPanelChild is DockPanel))
                 {
-                    var label = child as Label;
-                    if (label.Name.Equals(searchString, StringComparison.InvariantCultureIgnoreCase))
+                    continue;
+                }
+                
+                foreach (var dockPanelChild in ((DockPanel)stackPanelChild).Children)
+                {
+                    if (dockPanelChild is Label)
                     {
-                        return label;
+                        var label = dockPanelChild as Label;
+                        if (label.Name.Equals(searchString, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            return label;
+                        }
                     }
                 }
             }
