@@ -12,7 +12,7 @@
             <Label Name="lblScoreBlack" Height="50" Visibility="Hidden"></Label>
             <Label Name="lblScoreWhite" Height="50" Visibility="Hidden"></Label>
         </StackPanel>
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Name="pnlGrdGame" Orientation="Horizontal">
             <DockPanel>
                 <Label Name="lblFlippedDisksTopLeft" DockPanel.Dock="Top" Height="50" Visibility="Hidden"></Label>
                 <Label Name="lblFlippedDisksBottomLeft" DockPanel.Dock="Bottom" Height="50" Visibility="Hidden"></Label>

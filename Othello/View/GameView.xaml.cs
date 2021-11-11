@@ -391,7 +391,18 @@ namespace Othello.View
         {
             string searchString = "lblFlippedDisks" + quadrant.Direction.ToString();
 
-            // TODO: get label
+            foreach (var child in pnlGrdGame.Children)
+            {
+                if (child is Label)
+                {
+                    var label = child as Label;
+                    if (label.Name.Equals(searchString, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        return label;
+                    }
+                }
+            }
+
             return null;
         }
 
