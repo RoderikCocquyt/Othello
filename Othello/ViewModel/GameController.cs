@@ -178,7 +178,7 @@ namespace Othello.ViewModel
                     }
                     
                     var surroundingField = GetField(i, j);
-                    if (surroundingField != null)
+                    if (!(surroundingField is InvalidField))
                     {
                         surroundingFields.Add(surroundingField);
                     }
@@ -322,7 +322,7 @@ namespace Othello.ViewModel
             if (gridRow < 0 || gridRow >= param.NumberOfRows
                 || gridCol < 0 || gridCol >= param.NumberOfColumns)
             {
-                return null;
+                return new InvalidField();
             }
 
             return new Field(gridRow, gridCol)
