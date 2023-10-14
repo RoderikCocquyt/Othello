@@ -21,12 +21,14 @@ namespace Othello.ViewModel
         public GameController(GameParam param)
         {
             this.param = param;
-            VirtualGrid = new Side[param.NumberOfRows, param.NumberOfColumns];
-            Scores = new Dictionary<Side, int>() { { Side.Black, 0 }, { Side.White, 0 } };
+
+            InitializeGame();
         }
 
         internal Side[,] VirtualGrid { get; set; }
+
         internal List<Field> FieldsToFlip { get; set; }
+
         internal Dictionary<Side, int> Scores
         {
             get
@@ -57,16 +59,15 @@ namespace Othello.ViewModel
 
         internal bool ValidateDropTarget(Ellipse dropTarget, Side side)
         {
-            bool diskHasColor = !ValidateDisk(dropTarget);
-            if (diskHasColor)
+            if (!IsEmpty(dropTarget))
             {
                 return false;
             }
 
             var field = dropTarget.Tag as Field;
-            bool isAllowedMove = ValidateField(field, side);
+            bool isValidMove = ValidateField(field, side);
 
-            return isAllowedMove;
+            return isValidMove;
         }
 
         /// <summary>
@@ -121,11 +122,17 @@ namespace Othello.ViewModel
             return possibleSkips.Contains(Side.Black) && possibleSkips.Contains(Side.White);
         }
 
+        private void InitializeGame()
+        {
+            VirtualGrid = new Side[param.NumberOfRows, param.NumberOfColumns];
+            Scores = new Dictionary<Side, int>() { { Side.Black, 0 }, { Side.White, 0 } };
+        }
+
         /// <summary>
         /// Checks whether the target disk already has a color.
         /// </summary>
         /// <returns>True when the target disk has no color.</returns>
-        private bool ValidateDisk(Ellipse dropTarget)
+        private bool IsEmpty(Ellipse dropTarget)
         {
             if (dropTarget.Fill == null)
             {
