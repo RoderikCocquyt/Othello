@@ -178,7 +178,7 @@ namespace Othello.ViewModel
                     }
                     
                     var surroundingField = GetField(i, j);
-                    if (!(surroundingField is InvalidField))
+                    if (surroundingField is not InvalidField)
                     {
                         surroundingFields.Add(surroundingField);
                     }
@@ -190,9 +190,9 @@ namespace Othello.ViewModel
 
         private bool CheckSurroundingFields(Field field, List<Field> surroundingFields, Side currentSide)
         {
-            // We only need the surrounding disks of the opposite side
-            var oppositeFields = surroundingFields.Where(f => f.Side != Side.Empty && f.Side != currentSide).ToList();
-            if (!oppositeFields.Any())
+            // We only need the surrounding disks of the opponent
+            var fieldsOpponent = surroundingFields.Where(f => f.Side != Side.Empty && f.Side != currentSide).ToList();
+            if (!fieldsOpponent.Any())
             {
                 return false;
             }
@@ -200,7 +200,7 @@ namespace Othello.ViewModel
             // Reset the collection
             FieldsToFlip = new List<Field>();
 
-            foreach (var surroundingField in oppositeFields)
+            foreach (var surroundingField in fieldsOpponent)
             {
                 // Right
                 if (surroundingField.GridRow == field.GridRow && surroundingField.GridColumn > field.GridColumn)
