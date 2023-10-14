@@ -94,15 +94,13 @@ namespace Othello.View
 
         private void BuildGrid()
         {
-            for (int col = 0; col < NumberOfColumns; col++)
-            {
-                var newCol = new ColumnDefinition()
-                {
-                    Width = new GridLength(RectangleSize),
-                };
-                grdGame.ColumnDefinitions.Add(newCol);
-            }
+            CreateColumns();
+            CreateRows();
+            CreateFields();
+        }
 
+        private void CreateColumns()
+        {
             for (int row = 0; row < NumberOfRows; row++)
             {
                 var newRow = new RowDefinition()
@@ -111,7 +109,22 @@ namespace Othello.View
                 };
                 grdGame.RowDefinitions.Add(newRow);
             }
+        }
 
+        private void CreateRows()
+        {
+            for (int col = 0; col < NumberOfColumns; col++)
+            {
+                var newCol = new ColumnDefinition()
+                {
+                    Width = new GridLength(RectangleSize),
+                };
+                grdGame.ColumnDefinitions.Add(newCol);
+            }
+        }
+
+        private void CreateFields()
+        {
             for (int row = 0; row < NumberOfRows; row++)
             {
                 for (int col = 0; col < NumberOfColumns; col++)
@@ -181,13 +194,13 @@ namespace Othello.View
 
         private void SetCenter(List<Field> centerFields)
         {
-            // Set the center in the virtual grid
+            // In the virtual grid
             foreach (var field in centerFields)
             {
                 UpdateVirtualGridField(field, field.Side);
             }
 
-            // Set disk color in the grid
+            // In the grid
             foreach (var child in grdGame.Children)
             {
                 if (!(child is Grid))
