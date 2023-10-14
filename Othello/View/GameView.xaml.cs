@@ -25,6 +25,8 @@ namespace Othello.View
     {
         private const int NumberOfRows = 8;
         private const int NumberOfColumns = 8;
+        private const int RectangleSize = 50;
+        private const int CircleSize = 40;
 
         private readonly GameParam param;
         private readonly GameController controller;
@@ -96,7 +98,7 @@ namespace Othello.View
             {
                 var newCol = new ColumnDefinition()
                 {
-                    Width = new GridLength(50),
+                    Width = new GridLength(RectangleSize),
                 };
                 grdGame.ColumnDefinitions.Add(newCol);
             }
@@ -105,7 +107,7 @@ namespace Othello.View
             {
                 var newRow = new RowDefinition()
                 {
-                    Height = new GridLength(50),
+                    Height = new GridLength(RectangleSize),
                 };
                 grdGame.RowDefinitions.Add(newRow);
             }
@@ -124,8 +126,8 @@ namespace Othello.View
                     var rect = new Rectangle()
                     {
                         Name = "rect" + field.Name,
-                        Width = 50,
-                        Height = 50,
+                        Width = RectangleSize,
+                        Height = RectangleSize,
                         Fill = new SolidColorBrush(Colors.Green),
                         Stroke = new SolidColorBrush(Colors.Black),
                         StrokeThickness = 1,
@@ -138,8 +140,8 @@ namespace Othello.View
                     var circle = new Ellipse()
                     {
                         Name = "ell" + field.Name,
-                        Width = 40,
-                        Height = 40,
+                        Width = CircleSize,
+                        Height = CircleSize,
                         Tag = field,
                     };
                     circle.MouseMove += this.Ellipse_MouseMove;
