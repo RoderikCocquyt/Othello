@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace Othello.View
 {
@@ -28,8 +18,14 @@ namespace Othello.View
         {
             // One player game isn't implemented yet.
             if (NumberOfPlayers == 1)
+            {
+                string message = "You can only chose for a two players game.\nWe are planning to add a one player option in the future.";
+                string caption = "Number of players";
+                MessageBox.Show(message, caption, MessageBoxButton.OK, MessageBoxImage.Information);
+
                 return;
-            
+            }
+
             var gameView = new GameView(NumberOfPlayers);
             gameView.Show();
             this.Close();
