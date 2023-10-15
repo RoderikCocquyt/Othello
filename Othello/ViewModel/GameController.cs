@@ -15,7 +15,6 @@ namespace Othello.ViewModel
         private readonly GameParam param;
 
         private HashSet<Side> possibleSkips = new HashSet<Side>();
-        private Dictionary<Side, int> scores = new Dictionary<Side, int>();
 
         public GameController(GameParam param)
         {
@@ -24,37 +23,11 @@ namespace Othello.ViewModel
             InitializeGame();
         }
 
-        internal Side[,] VirtualGrid { get; set; }
+        internal Side[,] VirtualGrid { get; private set; }
 
-        internal List<Field> FieldsToFlip { get; set; }
+        internal List<Field> FieldsToFlip { get; private set; }
 
-        internal Dictionary<Side, int> Scores
-        {
-            get
-            {
-                int totalDisksBlack = 0;
-                int totalDisksWhite = 0;
-
-                foreach (Side side in VirtualGrid)
-                {
-                    if (side == Side.Black)
-                    {
-                        totalDisksBlack++;
-                    }
-
-                    if (side == Side.White)
-                    {
-                        totalDisksWhite++;
-                    }
-                }
-
-                scores[Side.Black] = totalDisksBlack;
-                scores[Side.White] = totalDisksWhite;
-                return scores;
-            }
-
-            set => scores = value;
-        }
+        internal Dictionary<Side, int> Scores { get; private set; }
 
         internal bool ValidateDropTarget(Ellipse dropTarget, Side side)
         {
@@ -139,7 +112,30 @@ namespace Othello.ViewModel
 
         internal Dictionary<Side, int> GetScores()
         {
+            CalculateScores();
             return Scores;
+        }
+
+        private void CalculateScores()
+        {
+            int totalDisksBlack = 0;
+            int totalDisksWhite = 0;
+
+            foreach (Side side in VirtualGrid)
+            {
+                if (side == Side.Black)
+                {
+                    totalDisksBlack++;
+                }
+
+                if (side == Side.White)
+                {
+                    totalDisksWhite++;
+                }
+            }
+
+            Scores[Side.Black] = totalDisksBlack;
+            Scores[Side.White] = totalDisksWhite;
         }
 
         private void InitializeGame()

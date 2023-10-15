@@ -486,11 +486,11 @@ namespace Othello.View
             btnSkipTurn.IsEnabled = false;
             
             scores = controller.GetScores();
-            ShowScores();
+            ShowFinalScores();
             ShowMainMenu();
         }
 
-        private void ShowScores()
+        private void ShowFinalScores()
         {
             string winner = scores[Side.Black] > scores[Side.White]
                     ? Side.Black.ToString()
