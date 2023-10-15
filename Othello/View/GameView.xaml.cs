@@ -318,7 +318,6 @@ namespace Othello.View
                         UpdateTargetDiskAppearance(targetDisk, currentColor);
                         UpdateVirtualGridField(targetDisk.Tag as Field, currentSide);
                         ExecuteMove(currentSide);
-                        controller.UpdateSkips(currentSide, skipped: false);
                     }
                 }
 
@@ -370,8 +369,7 @@ namespace Othello.View
             FlipDisks(controller.FieldsToFlip, currentSide);
             ShowNumberOfFlippedDisks(controller.FieldsToFlip);
             SwitchSide();
-
-            ResetLblSkipTurn();
+            ResetSkippedTurns(currentSide);
         }
 
         private void ShowNumberOfFlippedDisks(List<Field> fieldsToFlip)
@@ -459,6 +457,12 @@ namespace Othello.View
                 // Notify user
                 lblSkipTurn.Content = "You can't skip your turn\nas there's at least one move possible.";
             }
+        }
+
+        private void ResetSkippedTurns(Side currentSide)
+        {
+            controller.UpdateSkips(currentSide, skipped: false);
+            ResetLblSkipTurn();
         }
 
         private void ResetLblSkipTurn()
