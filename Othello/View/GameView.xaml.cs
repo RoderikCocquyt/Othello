@@ -475,7 +475,14 @@ namespace Othello.View
 
         private void btnEndGame_Click(object sender, RoutedEventArgs e)
         {
-            EndGame();
+            string message = "Are you sure?";
+            string caption = "End game";
+            var result = MessageBox.Show(message, caption, MessageBoxButton.YesNoCancel, MessageBoxImage.Information, MessageBoxResult.Yes);
+            
+            if (result == MessageBoxResult.Yes)
+            {
+                EndGame();
+            }
         }
 
         private void GetScores()
