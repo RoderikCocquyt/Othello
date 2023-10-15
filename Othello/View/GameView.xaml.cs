@@ -319,8 +319,8 @@ namespace Othello.View
 
         private void ExecuteMove(Side currentSide)
         {
-            FlipDisks(controller.fieldsToFlip, currentSide);
-            ShowNumberOfFlippedDisks(controller.fieldsToFlip);
+            FlipDisks(controller.FieldsToFlip, currentSide);
+            ShowNumberOfFlippedDisks(controller.FieldsToFlip);
             SwitchSide();
             ResetSkippedTurns(currentSide);
         }
@@ -375,7 +375,7 @@ namespace Othello.View
 
         private Quadrant GetQuadrantHavingMostFields(List<Field> fieldsToFlip)
         {
-            quadrants.Select(q => q.NumberOfFields = 0);
+            quadrants.ForEach(q => q.NumberOfFields = 0);
             foreach (Field field in fieldsToFlip)
             {
                 foreach (Quadrant quadrant in quadrants)
@@ -506,11 +506,11 @@ namespace Othello.View
             lblGameStatus.Visibility = Visibility.Visible;
             lblGameStatus.Content = gameStatus;
 
-            string scoreBlack = $"Score of player {Side.Black.ToString()}: {scores[Side.Black]} disks";
+            string scoreBlack = $"Score of player {Side.Black}: {scores[Side.Black]} disks";
             lblScoreBlack.Visibility = Visibility.Visible;
             lblScoreBlack.Content = scoreBlack;
 
-            string scoreWhite = $"Score of player {Side.White.ToString()}: {scores[Side.White]} disks";
+            string scoreWhite = $"Score of player {Side.White}: {scores[Side.White]} disks";
             lblScoreWhite.Visibility = Visibility.Visible;
             lblScoreWhite.Content = scoreWhite;
         }
