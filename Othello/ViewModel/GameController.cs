@@ -125,13 +125,21 @@ namespace Othello.ViewModel
         }
 
         /// <summary>
-        /// Game rule: the game ends when both players are'nt able to move 
-        /// (i.e. have skipped a turn).
+        /// Checks whether both players have skipped their turn.
         /// </summary>
         /// <returns>True when the game is finished.</returns>
+        /// <remarks>
+        /// Game rule: the game ends when both players are'nt able to move 
+        /// (i.e. have skipped a turn).
+        /// </remarks>
         internal bool CheckSkips()
         {
             return possibleSkips.Contains(Side.Black) && possibleSkips.Contains(Side.White);
+        }
+
+        internal Dictionary<Side, int> GetScores()
+        {
+            return Scores;
         }
 
         private void InitializeGame()

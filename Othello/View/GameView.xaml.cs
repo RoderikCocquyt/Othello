@@ -485,14 +485,9 @@ namespace Othello.View
             grdNewDisk.IsEnabled = false;
             btnSkipTurn.IsEnabled = false;
             
-            GetScores();
+            scores = controller.GetScores();
             ShowScores();
             ShowMainMenu();
-        }
-
-        private void GetScores()
-        {
-            scores = controller.Scores;
         }
 
         private void ShowScores()
