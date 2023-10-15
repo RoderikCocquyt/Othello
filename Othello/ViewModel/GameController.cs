@@ -70,10 +70,11 @@ namespace Othello.ViewModel
         }
 
         /// <summary>
-        /// A turn can't be skipped when a valid move can be made.
+        /// Validates if a turn can be skipped.
         /// </summary>
         /// <param name="currentSide">The color of the player who wants to skip his or her turn.</param>
         /// <returns>True when the turn can be skipped.</returns>
+        /// <remarks>A turn can't be skipped when a valid move can be made.</remarks>
         internal bool ValidateSkipTurn(Side currentSide)
         {
             for (int row = 0; row < VirtualGrid.GetLength(0); row++)
@@ -96,18 +97,21 @@ namespace Othello.ViewModel
                 }
             }
 
-            // No moves are possible -> it's valid to skip the turn.
             return true;
         }
 
         /// <summary>
         /// Stores the sides who have skipped a turn at least once.
         /// </summary>
-        internal void UpdateSkips(Side side)
+        internal void UpdateSkips(Side side, bool skipped)
         {
-            if (!possibleSkips.Contains(side))
+            if (skipped && !possibleSkips.Contains(side))
             {
                 possibleSkips.Add(side);
+            }
+            else if (!skipped && possibleSkips.Contains(side))
+            {
+                possibleSkips.Remove(side);
             }
         }
 

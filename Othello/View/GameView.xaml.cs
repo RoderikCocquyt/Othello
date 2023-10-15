@@ -318,6 +318,7 @@ namespace Othello.View
                         UpdateTargetDiskAppearance(targetDisk, currentColor);
                         UpdateVirtualGridField(targetDisk.Tag as Field, currentSide);
                         ExecuteMove(currentSide);
+                        controller.UpdateSkips(currentSide, false);
                     }
                 }
 
@@ -442,7 +443,7 @@ namespace Othello.View
 
             if (isValidSkip)
             {
-                controller.UpdateSkips(currentSide);
+                controller.UpdateSkips(currentSide, true);
                 bool gameIsFinished = controller.CheckSkips();
                 if (gameIsFinished)
                 {
