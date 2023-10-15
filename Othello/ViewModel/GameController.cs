@@ -293,6 +293,12 @@ namespace Othello.ViewModel
             return true;
         }
 
+        /// <summary>
+        /// Checks the next fields in the specified direction.
+        /// </summary>
+        /// <param name="surroundingField">The first field in that direction.</param>
+        /// <param name="fieldsToFlip">The collection of disks that will change sides.</param>
+        /// <returns>The new collection of disks that will change sides.</returns>
         private List<Field> GetNextFields(Field surroundingField,
                 List<Field> fieldsToFlip,
                 Side currentSide, 
@@ -304,29 +310,31 @@ namespace Othello.ViewModel
                 int maxCol)
         {
             var nextFields = new List<Field>();
-
-            // We've only selected surrounding fields of the opposite color.
-            // Therefore, the first surrounding field is certainly of the opposite color.
             Field nextField = new Field(surroundingField.GridRow, surroundingField.GridColumn)
             {
                 Side = surroundingField.Side 
             };
+
+            // We've only selected surrounding fields of the opposite color.
+            // Therefore, the first surrounding field (var nextField) is certainly of the opposite color.
+            Side oppositeSide = nextField.Side;
             nextFields.Add(nextField);
 
-            while (nextField.GridRow >= minRow && nextField.GridRow <= maxRow
-                && nextField.GridColumn >= minCol && nextField.GridColumn <= maxCol)
+            while (nextField.GridRow >= minRow && nextField.GridRow <= maxRow &&
+                    nextField.GridColumn >= minCol && nextField.GridColumn <= maxCol)
             {
                 nextField = new Field(nextField.GridRow + rowDiff, nextField.GridColumn + colDiff)
                 {
                     Side = virtualGrid[nextField.GridRow + rowDiff, nextField.GridColumn + colDiff]
                 };
 
-                if (nextField.Side == currentSide)
+                bool closingDiskCurrentSideMet = nextField.Side == currentSide;
+                if (closingDiskCurrentSideMet)
                 {
                     fieldsToFlip.AddRange(nextFields);
                     break;
                 }
-                else if (nextField.Side != Side.Empty) // = opposite side
+                else if (nextField.Side == oppositeSide)
                 {
                     nextFields.Add(nextField);
                 }
