@@ -51,46 +51,6 @@ namespace Othello.View
 
         internal Ellipse SourceDisk { get; set; }
 
-        internal void FlipDisks(List<Field> fields, Side side)
-        {
-            // Update virtual grid
-            foreach (var field in fields)
-            {
-                controller.UpdateVirtualGridField(field, side);
-            }
-
-            // Set disk color in the grid
-            foreach (var child in grdGame.Children)
-            {
-                if (!(child is Grid))
-                {
-                    continue;
-                }
-
-                var grdField = child as Grid;
-                var fieldToChange = fields.Where(f => f.GridColumn == Grid.GetColumn(grdField)
-                        && f.GridRow == Grid.GetRow(grdField))
-                        .FirstOrDefault();
-                if (fieldToChange == null)
-                {
-                    continue;
-                }
-
-                Ellipse circle = GetEllipse(grdField);
-                SolidColorBrush color = ColorHelper.GetColorFromSide(side);
-                circle.Fill = color;
-                circle.Stroke = color;
-            }
-        }
-
-        internal void SwitchSide()
-        {
-            var newDisk = GetEllipse(grdNewDisk);
-            var currentSide = ColorHelper.GetSideFromColor((SolidColorBrush)newDisk.Fill);
-            Side newSide = currentSide == Side.Black ? Side.White : Side.Black;
-            newDisk.Fill = ColorHelper.GetColorFromSide(newSide);
-        }
-
         private void BuildGrid()
         {
             CreateColumns();
@@ -100,18 +60,6 @@ namespace Othello.View
 
         private void CreateColumns()
         {
-            for (int row = 0; row < NumberOfRows; row++)
-            {
-                var newRow = new RowDefinition()
-                {
-                    Height = new GridLength(RectangleSize),
-                };
-                grdGame.RowDefinitions.Add(newRow);
-            }
-        }
-
-        private void CreateRows()
-        {
             for (int col = 0; col < NumberOfColumns; col++)
             {
                 var newCol = new ColumnDefinition()
@@ -119,6 +67,18 @@ namespace Othello.View
                     Width = new GridLength(RectangleSize),
                 };
                 grdGame.ColumnDefinitions.Add(newCol);
+            }
+        }
+
+        private void CreateRows()
+        {
+            for (int row = 0; row < NumberOfRows; row++)
+            {
+                var newRow = new RowDefinition()
+                {
+                    Height = new GridLength(RectangleSize),
+                };
+                grdGame.RowDefinitions.Add(newRow);
             }
         }
 
@@ -202,7 +162,7 @@ namespace Othello.View
             // In the grid
             foreach (var child in grdGame.Children)
             {
-                if (!(child is Grid))
+                if (child is not Grid)
                 {
                     continue;
                 }
@@ -258,7 +218,7 @@ namespace Othello.View
 
         private void Ellipse_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!(sender is Ellipse) || e.LeftButton != MouseButtonState.Pressed)
+            if (sender is not Ellipse || e.LeftButton != MouseButtonState.Pressed)
             {
                 return;
             }
@@ -270,7 +230,7 @@ namespace Othello.View
 
         private void Rectangle_DragEnter(object sender, DragEventArgs e)
         {
-            if (!(sender is Rectangle))
+            if (sender is not Rectangle)
             {
                 return;
             }
@@ -283,7 +243,7 @@ namespace Othello.View
 
         private void Rectangle_DragLeave(object sender, DragEventArgs e)
         {
-            if (!(sender is Rectangle))
+            if (sender is not Rectangle)
             {
                 return;
             }
@@ -295,12 +255,13 @@ namespace Othello.View
 
         private void Ellipse_Drop(object sender, DragEventArgs e)
         {
-            if (!(sender is Grid) || e.Data is null)
+            if (sender is not Grid || e.Data is null)
             {
                 return;
             }
 
-            foreach (var child in (sender as Grid).Children)
+            Grid grdField = sender as Grid;
+            foreach (var child in grdField.Children)
             {
                 if (child is Ellipse)
                 {
@@ -309,13 +270,13 @@ namespace Othello.View
                         return;
                     }
 
+                    Ellipse targetDisk = child as Ellipse;
                     Brush currentColor = (Brush)e.Data.GetData("Brush");
                     Side currentSide = ColorHelper.GetSideFromColor((SolidColorBrush)currentColor);
-                    var targetDisk = child as Ellipse;
 
                     if (controller.ValidateDropTarget(targetDisk, currentSide))
                     {
-                        UpdateTargetDiskAppearance(targetDisk, currentColor);
+                        SetTargetDiskAppearance(targetDisk, currentColor);
                         controller.UpdateVirtualGridField(targetDisk.Tag as Field, currentSide);
                         ExecuteMove(currentSide);
                     }
@@ -323,24 +284,24 @@ namespace Othello.View
 
                 if (child is Rectangle)
                 {
-                    var rect = child as Rectangle;
+                    Rectangle rect = child as Rectangle;
                     rect.Stroke = new SolidColorBrush(Colors.Black);
                     rect.StrokeThickness = 1;
                 }
             }
         }
 
-        private void UpdateTargetDiskAppearance(Ellipse targetDisk, Brush currentColor)
+        private void SetTargetDiskAppearance(Ellipse targetDisk, Brush currentColor)
         {
             // First, give the previously highlighted disk its original appearance.
             if (previousTargetDisk != null)
             {
-                HighlightDisk(previousTargetDisk, false);
+                HighlightDisk(previousTargetDisk, isHighlighted: false);
             }
 
             targetDisk.Fill = currentColor;
             previousTargetDisk = targetDisk;    // Save the current target disk to reset its appearance in the next move.
-            HighlightDisk(targetDisk, true);
+            HighlightDisk(targetDisk, isHighlighted: true);
         }
 
         /// <summary>
@@ -363,9 +324,42 @@ namespace Othello.View
             ResetSkippedTurns(currentSide);
         }
 
+        private void FlipDisks(List<Field> fields, Side sideToSwitchTo)
+        {
+            // Update virtual grid
+            foreach (var field in fields)
+            {
+                controller.UpdateVirtualGridField(field, sideToSwitchTo);
+            }
+
+            // Set disk color in the grid
+            foreach (var child in grdGame.Children)
+            {
+                if (child is not Grid)
+                {
+                    continue;
+                }
+
+                Grid grdField = child as Grid;
+                Field fieldToChange = fields.Where(f => f.GridColumn == Grid.GetColumn(grdField)
+                        && f.GridRow == Grid.GetRow(grdField))
+                        .FirstOrDefault();
+
+                if (fieldToChange == null)
+                {
+                    continue;
+                }
+
+                Ellipse circle = GetEllipse(grdField);
+                SolidColorBrush color = ColorHelper.GetColorFromSide(sideToSwitchTo);
+                circle.Fill = color;
+                circle.Stroke = color;
+            }
+        }
+
         private void ShowNumberOfFlippedDisks(List<Field> fieldsToFlip)
         {
-            if (fieldsToFlip.Count == 0)
+            if (!fieldsToFlip.Any())
             {
                 return;
             }
@@ -392,6 +386,7 @@ namespace Othello.View
                 }
             }
 
+            //TODO: get maximum in the previous loop
             Quadrant quadrantHavingMostFields = quadrants
                     .Where(q => q.NumberOfFields == quadrants.Max(q => q.NumberOfFields))
                     .FirstOrDefault();
@@ -404,7 +399,7 @@ namespace Othello.View
 
             foreach (var stackPanelChild in pnlGrdGame.Children)
             {
-                if (!(stackPanelChild is DockPanel))
+                if (stackPanelChild is not DockPanel)
                 {
                     continue;
                 }
@@ -413,7 +408,7 @@ namespace Othello.View
                 {
                     if (dockPanelChild is Label)
                     {
-                        var label = dockPanelChild as Label;
+                        Label label = dockPanelChild as Label;
                         if (label.Name.Equals(searchString, StringComparison.InvariantCultureIgnoreCase))
                         {
                             return label;
@@ -425,29 +420,12 @@ namespace Othello.View
             return null;
         }
 
-        private void btnSkipTurn_Click(object sender, RoutedEventArgs e)
+        private void SwitchSide()
         {
-            var currentSide = ColorHelper.GetSideFromColor((SolidColorBrush)ellCurrentPlayer.Fill);
-            bool isValidSkip = controller.ValidateSkipTurn(currentSide);
-
-            if (isValidSkip)
-            {
-                controller.UpdateSkips(currentSide, skipped: true);
-                bool gameIsFinished = controller.CheckSkips();
-                if (gameIsFinished)
-                {
-                    EndGame();
-                }
-                else
-                {
-                    SwitchSide();
-                }
-            }
-            else
-            {
-                // Notify user
-                lblSkipTurn.Content = "You can't skip your turn\nas there's at least one move possible.";
-            }
+            Ellipse newDisk = GetEllipse(grdNewDisk);
+            Side currentSide = ColorHelper.GetSideFromColor((SolidColorBrush)newDisk.Fill);
+            Side newSide = currentSide == Side.Black ? Side.White : Side.Black;
+            newDisk.Fill = ColorHelper.GetColorFromSide(newSide);
         }
 
         private void ResetSkippedTurns(Side currentSide)
@@ -461,6 +439,32 @@ namespace Othello.View
             if (lblSkipTurn.Content != null)
             {
                 lblSkipTurn.Content = string.Empty;
+            }
+        }
+
+        private void btnSkipTurn_Click(object sender, RoutedEventArgs e)
+        {
+            Side currentSide = ColorHelper.GetSideFromColor((SolidColorBrush)ellCurrentPlayer.Fill);
+            bool isValidSkip = controller.ValidateSkipTurn(currentSide);
+
+            if (isValidSkip)
+            {
+                controller.UpdateSkips(currentSide, skipped: true);
+
+                bool gameIsFinished = controller.CheckSkips();
+                if (gameIsFinished)
+                {
+                    EndGame();
+                }
+                else
+                {
+                    SwitchSide();
+                }
+            }
+            else
+            {
+                // Notify user
+                lblSkipTurn.Content = "You can't skip your turn as there's at least one possible move.";
             }
         }
 
