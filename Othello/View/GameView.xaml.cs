@@ -365,10 +365,43 @@ namespace Othello.View
                 return;
             }
 
+            var flippedDisksLabels = GetFlippedDisksLabels();
+            flippedDisksLabels.ForEach(l => ResetLabel(l));
+
             Quadrant quadrantHavingMostFields = GetQuadrantHavingMostFields(fieldsToFlip);
-            Label displayLabel = GetLabelToUseForDisplay(quadrantHavingMostFields);
+            Label displayLabel = GetLabelToUseForDisplay(flippedDisksLabels, quadrantHavingMostFields);
             displayLabel.Visibility = Visibility.Visible;
             displayLabel.Content = $"Flipped disks: {fieldsToFlip.Count}";
+        }
+
+        private List<Label> GetFlippedDisksLabels()
+        {
+            var flippedDisksLabels = new List<Label>();
+
+            foreach (var stackPanelChild in pnlGrdGame.Children)
+            {
+                if (stackPanelChild is not DockPanel)
+                {
+                    continue;
+                }
+
+                foreach (var dockPanelChild in ((DockPanel)stackPanelChild).Children)
+                {
+                    if (dockPanelChild is Label)
+                    {
+                        Label label = dockPanelChild as Label;
+                        flippedDisksLabels.Add(label);
+                    }
+                }
+            }
+
+            return flippedDisksLabels;
+        }
+
+        private void ResetLabel(Label label)
+        {
+            label.Visibility = Visibility.Hidden;
+            label.Content = string.Empty;
         }
 
         private Quadrant GetQuadrantHavingMostFields(List<Field> fieldsToFlip)
@@ -401,39 +434,19 @@ namespace Othello.View
             return quadrantHavingMostFields;
         }
 
-        private Label GetLabelToUseForDisplay(Quadrant quadrant)
+        private Label GetLabelToUseForDisplay(List<Label> flippedDisksLabels, Quadrant quadrant)
         {
             string searchString = "lblFlippedDisks" + quadrant.Direction.ToString();
 
-            foreach (var stackPanelChild in pnlGrdGame.Children)
+            foreach (var label in flippedDisksLabels)
             {
-                if (stackPanelChild is not DockPanel)
+                if (label.Name.Equals(searchString, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    continue;
-                }
-                
-                foreach (var dockPanelChild in ((DockPanel)stackPanelChild).Children)
-                {
-                    if (dockPanelChild is Label)
-                    {
-                        Label label = dockPanelChild as Label;
-                        ResetLabel(label);
-
-                        if (label.Name.Equals(searchString, StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            return label;
-                        }
-                    }
+                    return label;
                 }
             }
 
             return null;
-        }
-
-        private void ResetLabel(Label label)
-        {
-            label.Visibility = Visibility.Hidden;
-            label.Content = string.Empty;
         }
 
         private void SwitchSide()
