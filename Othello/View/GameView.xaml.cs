@@ -468,6 +468,11 @@ namespace Othello.View
             }
         }
 
+        private void btnEndGame_Click(object sender, RoutedEventArgs e)
+        {
+            EndGame();
+        }
+
         private void GetScores()
         {
             scores = controller.Scores;

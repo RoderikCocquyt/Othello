@@ -34,7 +34,10 @@
                     <Rectangle Fill="Green" Stroke="Black" StrokeThickness="4" Width="50" Height="50"></Rectangle>
                     <Ellipse Name="ellCurrentPlayer" Fill="Black" Width="40" Height="40" MouseMove="Ellipse_MouseMove"></Ellipse>
                 </Grid>
-                <Button Name="btnSkipTurn" Content="Skip turn" Click="btnSkipTurn_Click" Height="20" Margin="10"></Button>
+                <StackPanel DockPanel.Dock="Top" Orientation="Vertical" VerticalAlignment="Center">
+                    <Button Name="btnSkipTurn" Content="Skip turn" Click="btnSkipTurn_Click" Height="20" Margin="10"></Button>
+                    <Button Name="btnEndGame" Content="End game" Click="btnEndGame_Click" Height="20" Margin="10"></Button>
+                </StackPanel>
             </StackPanel>
             <Label Name="lblSkipTurn" DockPanel.Dock="Bottom" Margin="10"></Label>
         </DockPanel>
