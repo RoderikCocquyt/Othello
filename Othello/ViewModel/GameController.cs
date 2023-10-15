@@ -116,6 +116,15 @@ namespace Othello.ViewModel
         }
 
         /// <summary>
+        /// Sets a field in the virtual grid to the designated side.
+        /// </summary>
+        /// <param name="side">The field to update.</param>
+        internal void UpdateVirtualGridField(Field field, Side side)
+        {
+            VirtualGrid[field.GridRow, field.GridColumn] = side;
+        }
+
+        /// <summary>
         /// Game rule: the game ends when both players are'nt able to move 
         /// (i.e. have skipped a turn).
         /// </summary>

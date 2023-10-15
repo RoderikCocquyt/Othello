@@ -56,7 +56,7 @@ namespace Othello.View
             // Update virtual grid
             foreach (var field in fields)
             {
-                UpdateVirtualGridField(field, side);
+                controller.UpdateVirtualGridField(field, side);
             }
 
             // Set disk color in the grid
@@ -196,7 +196,7 @@ namespace Othello.View
             // In the virtual grid
             foreach (var field in centerFields)
             {
-                UpdateVirtualGridField(field, field.Side);
+                controller.UpdateVirtualGridField(field, field.Side);
             }
 
             // In the grid
@@ -316,7 +316,7 @@ namespace Othello.View
                     if (controller.ValidateDropTarget(targetDisk, currentSide))
                     {
                         UpdateTargetDiskAppearance(targetDisk, currentColor);
-                        UpdateVirtualGridField(targetDisk.Tag as Field, currentSide);
+                        controller.UpdateVirtualGridField(targetDisk.Tag as Field, currentSide);
                         ExecuteMove(currentSide);
                     }
                 }
@@ -353,15 +353,6 @@ namespace Othello.View
         {
             disk.Stroke = isHighlighted ? ColorHelper.GetOppositeColor(disk.Fill) : disk.Fill;
             disk.StrokeThickness = isHighlighted ? 2 : 1;
-        }
-
-        /// <summary>
-        /// Sets a field in the virtual grid to the designated side.
-        /// </summary>
-        /// <param name="side">The field to update.</param>
-        private void UpdateVirtualGridField(Field field, Side side)
-        {
-            controller.VirtualGrid[field.GridRow, field.GridColumn] = side;
         }
 
         private void ExecuteMove(Side currentSide)
