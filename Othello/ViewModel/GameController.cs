@@ -1,7 +1,6 @@
 ﻿using Othello.Model.Enums;
 using Othello.Model.Objects;
 using Othello.View;
-using Othello.ViewModel.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -2,7 +2,6 @@
 using Othello.Model.Objects;
 using Othello.View.Utils;
 using Othello.ViewModel;
-using Othello.ViewModel.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
