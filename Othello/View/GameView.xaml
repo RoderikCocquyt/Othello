@@ -7,11 +7,6 @@
         mc:Ignorable="d"
         Title="GameView" Height="550" Width="900">
     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <StackPanel>
-            <Label Name="lblGameStatus" Height="50" Visibility="Hidden"></Label>
-            <Label Name="lblScoreBlack" Height="50" Visibility="Hidden"></Label>
-            <Label Name="lblScoreWhite" Height="50" Visibility="Hidden"></Label>
-        </StackPanel>
         <StackPanel Name="pnlGrdGame" Orientation="Horizontal">
             <DockPanel>
                 <Label Name="lblFlippedDisksTopLeft" DockPanel.Dock="Top" Height="50" 
@@ -28,18 +23,27 @@
                        Content="FlippedDisksBottomRight" Visibility="Hidden"></Label>
             </DockPanel>
         </StackPanel>
-        <DockPanel VerticalAlignment="Center">
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+        <DockPanel VerticalAlignment="Center" LastChildFill="false">
+            <!-- TODO: bugfix. Disabled Label Foreground in ShinyRed.xaml as quick fix (bug: didn't show because of white foreground and white background,
+            probably sth wrong with inheritance) -->
+            <StackPanel DockPanel.Dock="Top" Orientation="Vertical" VerticalAlignment="Center">
+                <Label Name="lblGameStatus" Height="50" Visibility="Hidden"></Label>
+                <Label Name="lblScoreBlack" Height="50" Visibility="Hidden"></Label>
+                <Label Name="lblScoreWhite" Height="50" Visibility="Hidden"></Label>
+            </StackPanel>
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Vertical" VerticalAlignment="Center">
+                <Label Name="lblSkipTurn" Height="50" Margin="10"></Label>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
                 <Grid Name="grdNewDisk" Margin="50">
                     <Rectangle Fill="Green" Stroke="Black" StrokeThickness="4" Width="50" Height="50"></Rectangle>
                     <Ellipse Name="ellCurrentPlayer" Fill="Black" Width="40" Height="40" MouseMove="Ellipse_MouseMove"></Ellipse>
                 </Grid>
-                <StackPanel DockPanel.Dock="Top" Orientation="Vertical" VerticalAlignment="Center">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                     <Button Name="btnSkipTurn" Content="Skip turn" Click="btnSkipTurn_Click" Height="20" Margin="10"></Button>
                     <Button Name="btnEndGame" Content="End game" Click="btnEndGame_Click" Height="20" Margin="10"></Button>
                 </StackPanel>
             </StackPanel>
-            <Label Name="lblSkipTurn" DockPanel.Dock="Bottom" Margin="10"></Label>
         </DockPanel>
     </StackPanel>
 </Window>
