@@ -375,7 +375,10 @@ namespace Othello.View
 
         private Quadrant GetQuadrantHavingMostFields(List<Field> fieldsToFlip)
         {
+            Quadrant quadrantHavingMostFields = null;
+            int fieldsMax = 0;
             quadrants.ForEach(q => q.NumberOfFields = 0);
+
             foreach (Field field in fieldsToFlip)
             {
                 foreach (Quadrant quadrant in quadrants)
@@ -383,14 +386,16 @@ namespace Othello.View
                     if (quadrant.ContainsField(field))
                     {
                         quadrant.NumberOfFields++;
+
+                        if (quadrant.NumberOfFields > fieldsMax)
+                        {
+                            fieldsMax = quadrant.NumberOfFields;
+                            quadrantHavingMostFields = quadrant;
+                        }
                     }
                 }
             }
 
-            //TODO: get maximum in the previous loop
-            Quadrant quadrantHavingMostFields = quadrants
-                    .Where(q => q.NumberOfFields == quadrants.Max(q => q.NumberOfFields))
-                    .FirstOrDefault();
             return quadrantHavingMostFields;
         }
 
