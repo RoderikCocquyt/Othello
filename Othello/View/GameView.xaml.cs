@@ -462,7 +462,7 @@ namespace Othello.View
 
         private void ResetLblSkipTurn()
         {
-            if (lblSkipTurn.Content != null && !string.IsNullOrEmpty(lblSkipTurn.Content.ToString()))
+            if (lblSkipTurn.Content != null)
             {
                 lblSkipTurn.Content = string.Empty;
             }
