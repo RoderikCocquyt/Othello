@@ -42,6 +42,7 @@
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                     <Button Name="btnSkipTurn" Content="Skip turn" Click="btnSkipTurn_Click" Height="20" Margin="10"></Button>
                     <Button Name="btnEndGame" Content="End game" Click="btnEndGame_Click" Height="20" Margin="10"></Button>
+                    <Button Name="btnNewGame" Content="New game" Click="btnNewGame_Click" Height="20" Margin="10" IsEnabled="False"></Button>
                 </StackPanel>
             </StackPanel>
         </DockPanel>

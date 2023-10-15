@@ -47,6 +47,7 @@ namespace Othello.View
 
             BuildGrid();
             InitializeGrid();
+            ToggleButtons(enableGameButtons: true);
         }
 
         internal Ellipse SourceDisk { get; set; }
@@ -482,12 +483,18 @@ namespace Othello.View
 
         private void EndGame()
         {
-            grdNewDisk.IsEnabled = false;
-            btnSkipTurn.IsEnabled = false;
+            ToggleButtons(enableGameButtons: false);
             
             scores = controller.GetScores();
             ShowFinalScores();
-            ShowMainMenu();
+        }
+
+        private void ToggleButtons(bool enableGameButtons)
+        {
+            grdNewDisk.IsEnabled = enableGameButtons;
+            btnSkipTurn.IsEnabled = enableGameButtons;
+            btnEndGame.IsEnabled = enableGameButtons;
+            btnNewGame.IsEnabled = !enableGameButtons;
         }
 
         private void ShowFinalScores()
@@ -506,6 +513,11 @@ namespace Othello.View
             string scoreWhite = $"Score of player {Side.White.ToString()}: {scores[Side.White]} disks";
             lblScoreWhite.Visibility = Visibility.Visible;
             lblScoreWhite.Content = scoreWhite;
+        }
+
+        private void btnNewGame_Click(object sender, RoutedEventArgs e)
+        {
+            ShowMainMenu();
         }
 
         private void ShowMainMenu()
