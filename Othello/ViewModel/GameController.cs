@@ -146,6 +146,14 @@ namespace Othello.ViewModel
             return valid;
         }
 
+        /// <summary>
+        /// Validates the field as a valid move.
+        /// </summary>
+        /// <remarks>
+        /// If on your turn you cannot outflank and flip at least one opposing disc,
+        /// your turn is forfeited and your opponent moves again.
+        /// However, if a move is available to you, you may not forfeit your turn.
+        /// </remarks>
         private bool ValidateField(Field field, Side currentSide)
         {
             var surroundingFields = GetSurroundingFields(field);
