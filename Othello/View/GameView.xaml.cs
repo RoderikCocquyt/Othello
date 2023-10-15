@@ -383,16 +383,20 @@ namespace Othello.View
             {
                 foreach (Quadrant quadrant in quadrants)
                 {
-                    if (quadrant.ContainsField(field))
+                    if (!quadrant.ContainsField(field))
                     {
-                        quadrant.NumberOfFields++;
-
-                        if (quadrant.NumberOfFields > fieldsMax)
-                        {
-                            fieldsMax = quadrant.NumberOfFields;
-                            quadrantHavingMostFields = quadrant;
-                        }
+                        continue;
                     }
+
+                    quadrant.NumberOfFields++;
+
+                    if (quadrant.NumberOfFields > fieldsMax)
+                    {
+                        fieldsMax = quadrant.NumberOfFields;
+                        quadrantHavingMostFields = quadrant;
+                    }
+
+                    break;
                 }
             }
 
