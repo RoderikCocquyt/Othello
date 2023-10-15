@@ -368,9 +368,7 @@ namespace Othello.View
             Quadrant quadrantHavingMostFields = GetQuadrantHavingMostFields(fieldsToFlip);
             Label displayLabel = GetLabelToUseForDisplay(quadrantHavingMostFields);
             displayLabel.Visibility = Visibility.Visible;
-            displayLabel.Content = fieldsToFlip.Count.ToString();
-
-            // TODO: set visibility to hidden again
+            displayLabel.Content = $"Flipped disks: {fieldsToFlip.Count}";
         }
 
         private Quadrant GetQuadrantHavingMostFields(List<Field> fieldsToFlip)
@@ -419,6 +417,8 @@ namespace Othello.View
                     if (dockPanelChild is Label)
                     {
                         Label label = dockPanelChild as Label;
+                        ResetLabel(label);
+
                         if (label.Name.Equals(searchString, StringComparison.InvariantCultureIgnoreCase))
                         {
                             return label;
@@ -428,6 +428,12 @@ namespace Othello.View
             }
 
             return null;
+        }
+
+        private void ResetLabel(Label label)
+        {
+            label.Visibility = Visibility.Hidden;
+            label.Content = string.Empty;
         }
 
         private void SwitchSide()
