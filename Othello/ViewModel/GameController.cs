@@ -13,21 +13,19 @@ namespace Othello.ViewModel
     public class GameController
     {
         private readonly GameParam param;
+        private readonly HashSet<Side> possibleSkips = new HashSet<Side>();
 
-        private HashSet<Side> possibleSkips = new HashSet<Side>();
+        private Side[,] virtualGrid;
 
         public GameController(GameParam param)
         {
             this.param = param;
-
             InitializeGame();
         }
 
-        internal Side[,] VirtualGrid { get; private set; }
+        internal List<Field> FieldsToFlip { get; private set; } = new List<Field>();
 
-        internal List<Field> FieldsToFlip { get; private set; }
-
-        internal Dictionary<Side, int> Scores { get; private set; }
+        internal Dictionary<Side, int> Scores { get; private set; } = new Dictionary<Side, int>();
 
         internal bool ValidateDropTarget(Ellipse dropTarget, Side side)
         {
@@ -36,7 +34,7 @@ namespace Othello.ViewModel
                 return false;
             }
 
-            var field = dropTarget.Tag as Field;
+            Field field = dropTarget.Tag as Field;
             bool isValidMove = ValidateField(field, side);
 
             return isValidMove;
@@ -50,17 +48,17 @@ namespace Othello.ViewModel
         /// <remarks>A turn can't be skipped when a valid move can be made.</remarks>
         internal bool ValidateSkipTurn(Side currentSide)
         {
-            for (int row = 0; row < VirtualGrid.GetLength(0); row++)
+            for (int row = 0; row < virtualGrid.GetLength(0); row++)
             {
-                for (int col = 0; col < VirtualGrid.GetLength(1); col++)
+                for (int col = 0; col < virtualGrid.GetLength(1); col++)
                 {
                     // Only check empty fields as all the other fields are occupied already.
-                    if (VirtualGrid[row, col] != Side.Empty)
+                    if (virtualGrid[row, col] != Side.Empty)
                     {
                         continue;
                     }
 
-                    var field = new Field(row, col) { Side = currentSide };
+                    Field field = new Field(row, col) { Side = currentSide };
                     bool aMoveIsPossible = ValidateField(field, currentSide);
 
                     if (aMoveIsPossible)
@@ -94,7 +92,7 @@ namespace Othello.ViewModel
         /// <param name="side">The field to update.</param>
         internal void UpdateVirtualGridField(Field field, Side side)
         {
-            VirtualGrid[field.GridRow, field.GridColumn] = side;
+            virtualGrid[field.GridRow, field.GridColumn] = side;
         }
 
         /// <summary>
@@ -121,7 +119,7 @@ namespace Othello.ViewModel
             int totalDisksBlack = 0;
             int totalDisksWhite = 0;
 
-            foreach (Side side in VirtualGrid)
+            foreach (Side side in virtualGrid)
             {
                 if (side == Side.Black)
                 {
@@ -140,7 +138,7 @@ namespace Othello.ViewModel
 
         private void InitializeGame()
         {
-            VirtualGrid = new Side[param.NumberOfRows, param.NumberOfColumns];
+            virtualGrid = new Side[param.NumberOfRows, param.NumberOfColumns];
             Scores = new Dictionary<Side, int>() { { Side.Black, 0 }, { Side.White, 0 } };
         }
 
@@ -308,7 +306,7 @@ namespace Othello.ViewModel
             var nextFields = new List<Field>();
 
             // We've only selected surrounding fields of the opposite color.
-            // Therefore, the first field, the surrounding field, is certainly of the opposite color.
+            // Therefore, the first surrounding field is certainly of the opposite color.
             Field nextField = new Field(surroundingField.GridRow, surroundingField.GridColumn)
             {
                 Side = surroundingField.Side 
@@ -320,7 +318,7 @@ namespace Othello.ViewModel
             {
                 nextField = new Field(nextField.GridRow + rowDiff, nextField.GridColumn + colDiff)
                 {
-                    Side = VirtualGrid[nextField.GridRow + rowDiff, nextField.GridColumn + colDiff]
+                    Side = virtualGrid[nextField.GridRow + rowDiff, nextField.GridColumn + colDiff]
                 };
 
                 if (nextField.Side == currentSide)
@@ -351,7 +349,7 @@ namespace Othello.ViewModel
 
             return new Field(gridRow, gridCol)
             {
-                Side = VirtualGrid[gridRow, gridCol]
+                Side = virtualGrid[gridRow, gridCol]
             };
         }
     }

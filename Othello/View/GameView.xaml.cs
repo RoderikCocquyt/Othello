@@ -319,8 +319,8 @@ namespace Othello.View
 
         private void ExecuteMove(Side currentSide)
         {
-            FlipDisks(controller.FieldsToFlip, currentSide);
-            ShowNumberOfFlippedDisks(controller.FieldsToFlip);
+            FlipDisks(controller.fieldsToFlip, currentSide);
+            ShowNumberOfFlippedDisks(controller.fieldsToFlip);
             SwitchSide();
             ResetSkippedTurns(currentSide);
         }
