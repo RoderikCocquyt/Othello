@@ -485,20 +485,25 @@ namespace Othello.View
             }
         }
 
-        private void GetScores()
-        {
-            scores = controller.Scores;
-        }
-
         private void EndGame()
         {
             grdNewDisk.IsEnabled = false;
             btnSkipTurn.IsEnabled = false;
             
             GetScores();
+            ShowScores();
+            ShowMainMenu();
+        }
 
-            string winner = scores[Side.Black] > scores[Side.White] 
-                    ? Side.Black.ToString() 
+        private void GetScores()
+        {
+            scores = controller.Scores;
+        }
+
+        private void ShowScores()
+        {
+            string winner = scores[Side.Black] > scores[Side.White]
+                    ? Side.Black.ToString()
                     : Side.White.ToString();
             string gameStatus = "Game over! Winner: " + winner;
             lblGameStatus.Visibility = Visibility.Visible;
@@ -511,7 +516,10 @@ namespace Othello.View
             string scoreWhite = $"Score of player {Side.White.ToString()}: {scores[Side.White]} disks";
             lblScoreWhite.Visibility = Visibility.Visible;
             lblScoreWhite.Content = scoreWhite;
+        }
 
+        private void ShowMainMenu()
+        {
             var mainMenu = new MainMenu();
             mainMenu.Show();
             this.Close();
